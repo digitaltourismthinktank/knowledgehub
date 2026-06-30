@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Content and GEO Strategy Advisor · AI Discoverability · DTTT Member Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F2044;--navy-deep:#0A1733;--navy-mid:#1A3060;--navy-light:#E8EDF5;--navy-rule:#CBD5E8;
+  --teal:#00857C;--teal-dark:#006B63;--teal-light:#E6F3F2;--teal-text:#006B63;
+  --white:#FFFFFF;--bg:#F7F8FA;--surface:#FFFFFF;--border:#E2E6EF;
+  --text:#0F2044;--sub:#4A5568;--muted:#8A94A6;
+  --green:#1A7A4A;--green-l:#E6F4ED;
+  --amber:#925A00;--amber-l:#FEF3E2;
+  --red:#9B1C1C;--red-l:#FEF2F2;
+  --font:'Inter',-apple-system,sans-serif;
+  --font-alt:'IBM Plex Sans',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:.875rem;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+.app{display:flex;min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* SIDEBAR (mockup only, built in Webflow) */
+.sidebar{width:256px;min-width:256px;background:var(--navy-deep);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;box-shadow:inset -1px 0 0 rgba(255,255,255,.07),6px 0 28px rgba(10,23,51,.22);z-index:2}
+.sb-top{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sb-logo{height:26px;width:auto;margin-bottom:15px;opacity:.96;display:flex;align-items:center;gap:9px}
+.sb-logo svg{height:26px;width:auto}
+.sb-logo span{font-family:var(--font-alt);font-size:.6875rem;font-weight:600;color:#fff;letter-spacing:.02em;line-height:1.15;opacity:.9}
+.sb-org{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:4px;background:rgba(255,255,255,.05);cursor:pointer;transition:background .14s}
+.sb-org:hover{background:rgba(255,255,255,.09)}
+.sb-org-mark{width:30px;height:30px;border-radius:4px;background:linear-gradient(135deg,#27457E,#16284E);display:flex;align-items:center;justify-content:center;font-family:var(--font-alt);font-weight:700;font-size:.8125rem;color:#fff;flex-shrink:0}
+.sb-org-info{min-width:0;flex:1}
+.sb-org-name{font-family:var(--font-alt);font-size:.8125rem;font-weight:600;color:#fff;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-org-tier{display:flex;align-items:center;gap:5px;font-size:.625rem;color:rgba(255,255,255,.5);font-family:var(--font-mono);letter-spacing:.02em;margin-top:2px}
+.sb-org-tier .dot{width:5px;height:5px;border-radius:50%;background:#8FA4C8}
+.sb-nav{flex:1;overflow-y:auto;padding:10px 12px}
+.sb-nav::-webkit-scrollbar{width:0}
+.sb-back{display:flex;align-items:center;gap:8px;padding:8px 11px;margin:0 0 6px;font-size:.75rem;font-weight:500;color:rgba(255,255,255,.5);font-family:var(--font-alt);cursor:pointer;border-radius:4px;transition:all .14s;border:none;background:none;width:100%;text-align:left}
+.sb-back:hover{color:#fff;background:rgba(255,255,255,.06)}
+.sb-back svg{width:14px;height:14px;flex-shrink:0;opacity:.85}
+.sb-section{font-size:.5625rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.26);padding:14px 10px 6px;font-family:var(--font-alt)}
+.ni{display:flex;align-items:center;gap:11px;padding:8px 11px;cursor:pointer;font-size:.8125rem;font-weight:400;color:rgba(255,255,255,.55);transition:all .14s;border-radius:4px;margin-bottom:1px;border:none;background:none;width:100%;text-align:left}
+.ni:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.06)}
+.ni.on{color:#fff;background:rgba(255,255,255,.1);font-weight:500}
+.ni .use-dot{margin-left:auto;width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.sb-foot{padding:10px 12px 14px;border-top:1px solid rgba(255,255,255,.07)}
+.sb-user{display:flex;align-items:center;gap:10px;padding:9px 10px}
+.sb-ava{width:30px;height:30px;border-radius:50%;background:#27457E;display:flex;align-items:center;justify-content:center;font-size:.6875rem;font-weight:600;color:#fff;font-family:var(--font-alt);flex-shrink:0}
+.sb-user-info{min-width:0;flex:1}
+.sb-user-name{font-size:.75rem;font-weight:500;color:rgba(255,255,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user-role{font-size:.625rem;color:rgba(255,255,255,.4)}
+
+/* MAIN */
+.main-col{flex:1;min-width:0;background:var(--bg)}
+.top-bar{background:var(--navy)}
+.top-bar-inner{padding:1.9rem 2.75rem;max-width:1180px}
+.bc{font-size:.6875rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.85rem;display:flex;align-items:center;gap:.55rem;font-family:var(--font-alt)}
+.bc .sep{color:rgba(255,255,255,.22)}
+h1.pt{font-family:var(--font-alt);font-size:1.85rem;font-weight:600;color:#fff;line-height:1.14;letter-spacing:-.02em;margin-bottom:.5rem}
+.ps{font-size:.9375rem;font-weight:300;color:rgba(255,255,255,.64);max-width:660px;line-height:1.6}
+
+.page{padding:1.9rem 2.75rem 4rem;max-width:1180px;animation:up .2s ease}
+@keyframes up{from{transform:translateY(5px)}to{transform:none}}
+
+.sec-head{display:flex;align-items:center;gap:.7rem;margin-bottom:1.05rem}
+.sec-ico{width:30px;height:30px;border-radius:4px;background:var(--teal-light);color:var(--teal-dark);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-ico svg{width:16px;height:16px}
+.sec-title{font-family:var(--font-alt);font-size:1.0625rem;font-weight:600;color:var(--navy);letter-spacing:-.01em}
+.sec-sub{font-size:.8125rem;color:var(--sub);font-weight:300;margin-top:.2rem}
+.sec-wrap{margin-bottom:.95rem}
+
+.body3{font-size:.875rem;color:var(--sub);line-height:1.72;font-weight:300}
+
+/* WIZARD */
+.wizard{max-width:760px}
+.wz-progress{height:4px;background:var(--navy-light);border-radius:2px;overflow:hidden;margin-bottom:1.6rem}
+.wz-progress span{display:block;height:100%;background:var(--teal);transition:width .3s ease}
+.wz-step-l{font-family:var(--font-mono);font-size:.6875rem;color:var(--muted);letter-spacing:.04em;margin-bottom:.8rem}
+.wz-q{font-family:var(--font-alt);font-size:1.4rem;font-weight:600;color:var(--navy);letter-spacing:-.015em;line-height:1.2;margin-bottom:.5rem}
+.wz-help{font-size:.875rem;color:var(--sub);font-weight:300;line-height:1.55;margin-bottom:1.4rem;max-width:560px}
+.opts{display:grid;gap:.6rem;margin-bottom:1.7rem}
+.opts.cols{grid-template-columns:repeat(2,1fr)}
+@media(max-width:620px){.opts.cols{grid-template-columns:1fr}}
+.opt{display:flex;align-items:flex-start;gap:.8rem;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:.95rem 1.1rem;cursor:pointer;transition:all .14s;width:100%;font-family:var(--font)}
+.opt:hover{border-color:var(--navy-rule);background:var(--bg)}
+.opt.on{border-color:var(--teal);background:var(--teal-light);box-shadow:inset 0 0 0 1px var(--teal)}
+.opt-tick{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--navy-rule);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .14s}
+.opt.multi .opt-tick{border-radius:4px}
+.opt.on .opt-tick{border-color:var(--teal);background:var(--teal)}
+.opt-tick svg{width:11px;height:11px;color:#fff;opacity:0;transition:opacity .14s}
+.opt.on .opt-tick svg{opacity:1}
+.opt-body{min-width:0}
+.opt-t{font-family:var(--font-alt);font-size:.875rem;font-weight:600;color:var(--text);line-height:1.3;display:block}
+.opt-d{font-size:.75rem;color:var(--muted);font-weight:300;margin-top:.15rem;line-height:1.4;display:block}
+.wz-nav{display:flex;align-items:center;gap:.8rem}
+.wz-nav .spacer{flex:1}
+.btn{font-family:var(--font-alt);font-size:.8125rem;font-weight:600;border-radius:4px;padding:.7rem 1.4rem;cursor:pointer;transition:all .14s;border:1px solid transparent;display:inline-flex;align-items:center;justify-content:center;gap:.45rem}
+.btn svg{width:14px;height:14px;flex-shrink:0}
+.result-actions .btn{font-size:.75rem;padding:.5rem .95rem}
+.result-actions .btn svg{width:13px;height:13px}
+.btn-primary{background:var(--teal);color:#fff;border-color:var(--teal)}
+.btn-primary:hover{background:var(--teal-dark);border-color:var(--teal-dark)}
+.btn-primary:disabled{background:var(--navy-light);color:var(--muted);border-color:var(--border);cursor:not-allowed}
+.btn-ghost{background:none;color:var(--sub);border-color:var(--border)}
+.btn-ghost:hover{border-color:var(--navy-rule);color:var(--text)}
+
+/* RESULT: input strip */
+.input-strip{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin-bottom:1.7rem;padding-bottom:1.4rem;border-bottom:1px solid var(--border)}
+.in-chip{font-family:var(--font-alt);font-size:.6875rem;font-weight:500;color:var(--navy);background:var(--navy-light);border-radius:3px;padding:.3rem .6rem}
+.in-revise{margin-left:auto;font-family:var(--font-alt);font-size:.75rem;font-weight:600;color:var(--teal-dark);cursor:pointer;background:none;border:none;display:inline-flex;align-items:center;gap:.35rem}
+.in-revise:hover{text-decoration:underline}
+.in-revise svg{width:13px;height:13px}
+
+/* BLUEPRINT HEAD */
+.bp-head{background:var(--navy);border-radius:4px;padding:1.7rem 1.9rem;color:#fff;margin-bottom:1.5rem}
+.bp-eyebrow{font-family:var(--font-alt);font-size:.5625rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--teal);margin-bottom:.7rem}
+.bp-title{font-family:var(--font-alt);font-size:1.5rem;font-weight:600;line-height:1.18;letter-spacing:-.02em;margin-bottom:1.1rem;text-transform:capitalize}
+.bp-para{font-size:.875rem;font-weight:300;line-height:1.7;color:rgba(255,255,255,.82);max-width:720px;margin-bottom:.8rem}
+.bp-para:last-child{margin-bottom:0}
+.bp-para strong{color:#fff;font-weight:500}
+
+/* DEPRIORITISE */
+.depri{background:var(--amber-l);border:1px solid #F0DBAB;border-radius:4px;padding:1.1rem 1.3rem;margin-bottom:1.9rem}
+.depri-l{font-family:var(--font-alt);font-size:.5625rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem}
+.depri-l svg{width:13px;height:13px}
+.depri-item{display:flex;gap:.55rem;font-size:.8125rem;color:#5C4413;line-height:1.55;margin-bottom:.5rem}
+.depri-item:last-child{margin-bottom:0}
+.depri-item strong{font-weight:600;color:#3F2E0A}
+.depri-item .x{color:var(--amber);flex-shrink:0;font-weight:700}
+
+/* MATRIX */
+.matrix{border:1px solid var(--border);border-radius:4px;overflow-x:auto;background:var(--surface);margin-bottom:.85rem}
+.mx-grid{min-width:660px}
+.mx-row{display:grid;grid-template-columns:152px repeat(5,1fr);border-top:1px solid var(--border)}
+.mx-row:first-child{border-top:none}
+.mx-head{background:var(--navy-light)}
+.mx-ch{padding:.7rem .55rem;font-family:var(--font-alt);font-size:.625rem;font-weight:600;color:var(--navy);line-height:1.25;text-align:center;border-left:1px solid var(--border)}
+.mx-ch:first-child{text-align:left;border-left:none}
+.mx-aud{padding:.85rem .85rem;font-family:var(--font-alt);font-size:.8125rem;font-weight:600;color:var(--text);display:flex;align-items:center}
+.mx-aud::first-letter{text-transform:uppercase}
+.mx-cell{border-left:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;padding:.7rem .4rem;min-height:54px}
+.mx-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.mx-dot.high{background:var(--navy)}
+.mx-dot.med{background:none;border:1.5px solid var(--navy-rule)}
+.mx-dot.start{background:var(--teal);box-shadow:0 0 0 3px var(--teal-light)}
+.mx-dash{color:var(--navy-rule);font-size:1rem;line-height:1}
+.mx-start-l{font-family:var(--font-alt);font-size:.5rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--teal-dark)}
+.mx-legend{display:flex;gap:1.3rem;flex-wrap:wrap;font-size:.6875rem;color:var(--sub);margin-bottom:1.9rem}
+.mx-legend span{display:inline-flex;align-items:center;gap:.45rem}
+.mx-legend .mx-dot{width:9px;height:9px}
+
+/* CHANNELS */
+.chan{border:1px solid var(--border);border-radius:4px;overflow:hidden;background:var(--surface);margin-bottom:1.9rem}
+.chan-row{display:grid;grid-template-columns:210px 1fr;gap:1.1rem;padding:.85rem 1.2rem;align-items:center;border-top:1px solid var(--border)}
+.chan-row:first-child{border-top:none}
+.chan-row.lead{background:var(--teal-light)}
+.chan-name{font-family:var(--font-alt);font-size:.8125rem;font-weight:600;color:var(--text);display:flex;align-items:center;gap:.5rem}
+.chan-name .lead-tag{font-family:var(--font-mono);font-size:.5625rem;font-weight:500;color:var(--teal-dark);background:#fff;border:1px solid var(--teal);border-radius:2px;padding:.05rem .32rem;letter-spacing:.03em}
+.chan-r{min-width:0}
+.chan-bar{height:7px;background:var(--navy-light);border-radius:4px;overflow:hidden;margin-bottom:.4rem;max-width:240px}
+.chan-bar span{display:block;height:100%;background:var(--navy);border-radius:4px}
+.chan-row.lead .chan-bar span{background:var(--teal)}
+.chan-why{font-size:.75rem;color:var(--sub);font-weight:300;line-height:1.45}
+
+/* FOCUS */
+.focus{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.9rem}
+.fc-item{display:grid;grid-template-columns:34px 1fr;gap:1rem;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.05rem 1.2rem}
+.fc-n{width:34px;height:34px;border-radius:4px;background:var(--navy);color:#fff;font-family:var(--font-mono);font-size:.8125rem;font-weight:500;display:flex;align-items:center;justify-content:center}
+.fc-item:first-child .fc-n{background:var(--teal)}
+.fc-t{font-family:var(--font-alt);font-size:.9375rem;font-weight:600;color:var(--text);margin-bottom:.25rem}
+.fc-d{font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.55;margin-bottom:.55rem}
+.fc-link{font-family:var(--font-alt);font-size:.6875rem;font-weight:600;color:var(--teal-dark);display:inline-flex;align-items:center;gap:.35rem}
+.fc-link:hover{text-decoration:underline}
+.fc-link svg{width:12px;height:12px}
+
+/* WHERE THIS GOES */
+.where{background:var(--navy-light);border:1px solid var(--navy-rule);border-radius:4px;padding:1.3rem 1.5rem;margin-bottom:1.9rem}
+.where-l{font-family:var(--font-alt);font-size:.9375rem;font-weight:600;color:var(--navy);margin-bottom:.4rem}
+.where-d{font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.55;margin-bottom:1rem;max-width:700px}
+.where-links{display:flex;gap:.6rem;flex-wrap:wrap}
+.where-link{font-family:var(--font-alt);font-size:.75rem;font-weight:600;color:var(--navy);background:#fff;border:1px solid var(--navy-rule);border-radius:4px;padding:.55rem .9rem;display:inline-flex;align-items:center;gap:.45rem;transition:all .14s}
+.where-link:hover{border-color:var(--teal);color:var(--teal-dark)}
+.where-link svg{width:13px;height:13px}
+
+.result-actions{display:flex;gap:.7rem;flex-wrap:wrap;padding-top:.3rem}
+.mock-note{font-family:var(--font-mono);font-size:.625rem;color:var(--muted);margin-top:1.8rem;padding-top:1rem;border-top:1px dashed var(--border);line-height:1.55;max-width:760px}
+
+/* PRINT-ONLY COVER AND FOOTER */
+.print-cover,.print-footer{display:none}
+.pc-logo{display:flex;align-items:center;gap:11px;margin-bottom:42px}
+.pc-logo svg{height:34px;width:auto}
+.pc-logo span{font-family:var(--font-alt);font-size:.95rem;font-weight:600;color:var(--navy);line-height:1.15}
+.pc-eyebrow{font-family:var(--font-alt);font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-dark);margin-bottom:14px}
+.pc-title{font-family:var(--font-alt);font-size:2.3rem;font-weight:600;color:var(--navy);letter-spacing:-.022em;line-height:1.08;margin-bottom:12px}
+.pc-sub{font-size:1rem;color:var(--sub);font-weight:300;margin-bottom:34px;max-width:430px;line-height:1.5}
+.pc-meta{border-top:1px solid var(--border);padding-top:16px}
+.pc-org{font-family:var(--font-alt);font-size:.95rem;font-weight:600;color:var(--navy)}
+.pc-date{font-family:var(--font-mono);font-size:.78rem;color:var(--muted);margin-top:4px}
+
+@media print{
+  @page{margin:18mm 15mm 20mm}
+  .sidebar,.top-bar,.in-revise,.result-actions,.mock-note{display:none!important}
+  .app{display:block}
+  .main-col{background:#fff}
+  .page{padding:0;max-width:100%;animation:none}
+  body{background:#fff;font-size:10.5pt;line-height:1.5}
+  .print-cover{display:flex;flex-direction:column;justify-content:center;min-height:86vh;break-after:page;page-break-after:always}
+  .print-footer{display:block;position:fixed;bottom:6mm;left:0;right:0;text-align:center;font-family:var(--font-mono);font-size:7.5pt;color:var(--muted);letter-spacing:.02em}
+  .input-strip{margin-top:0;border-top:none;padding-top:0}
+  .bp-head,.depri,.fc-item,.chan-row,.mx-row,.where,.matrix,.mx-legend,.sec-head{break-inside:avoid;page-break-inside:avoid}
+  .sec-head{break-after:avoid;page-break-after:avoid;margin-top:.5rem}
+  .bp-head{margin-top:0}
+  .bp-head,.fc-n,.mx-dot,.chan-bar span,.depri,.mx-head,.chan-row.lead,.in-chip,.pc-title{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sb-top">
+      <div class="sb-logo">
+        <svg viewBox="0 0 733 710" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M677.748 688.086L345.283 597.113L521.027 224.124L732.332 333.705L677.748 688.086Z" fill="white"/><path d="M332.468 593.803L180.295 710L184.43 251.827L458.59 324.192L332.468 593.803Z" fill="white"/><path d="M463.137 310.962L187.323 238.183L505.315 224.124L463.137 310.962Z" fill="white"/><path d="M342.806 1.23719L189.393 226.189L513.174 209.235L568.171 66.9859L342.806 1.23719Z" fill="white"/><path d="M174.916 225.365L172.849 347.351L0 241.492L52.9297 0L273.746 79.8081L174.916 225.365Z" fill="white"/></svg>
+        <span>Digital Tourism<br>Think Tank</span>
+      </div>
+      <div class="sb-org">
+        <div class="sb-org-mark">VS</div>
+        <div class="sb-org-info">
+          <div class="sb-org-name">Visit Skåne</div>
+          <div class="sb-org-tier"><span class="dot"></span>Evolve member</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <button class="sb-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        Back to Knowledge Hub
+      </button>
+      <div class="sb-section">AI Discoverability</div>
+      <button class="ni">Overview</button>
+      <button class="ni">Research snapshot</button>
+      <button class="ni">Deep dive</button>
+      <button class="ni">Best practice</button>
+      <button class="ni">Readiness diagnostic<span class="use-dot"></span></button>
+      <button class="ni on">Tools<span class="use-dot"></span></button>
+      <button class="ni">Resources</button>
+    </nav>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-ava">HM</div>
+        <div class="sb-user-info">
+          <div class="sb-user-name">Helen Magnusson</div>
+          <div class="sb-user-role">Head of Digital</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-col">
+    <div class="top-bar">
+      <div class="top-bar-inner">
+        <div class="bc">Knowledge Hub <span class="sep">/</span> AI Discoverability <span class="sep">/</span> Tools</div>
+        <h1 class="pt">Content and GEO Strategy Advisor</h1>
+        <div class="ps">Answer six quick questions and get a prescriptive content and GEO plan shaped to your organisation, your markets and your capacity. It tells you where to focus, and what to leave alone.</div>
+      </div>
+    </div>
+    <div class="page" id="page"></div>
+  </div>
+</div>
+
+<script>
+/* ICONS */
+const ICO={
+  tick:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>',
+  edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+  download:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+  ext:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
+  map:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>',
+  layers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',
+  list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+  compass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>',
+  warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+};
+
+/* INTAKE DEFINITION */
+const STEPS=[
+ {key:'orgType',q:'What kind of organisation are you?',help:'This sets the whole shape of the strategy.',type:'single',opts:[
+   {v:'national',t:'National tourism organisation',d:'A country or nation-level body'},
+   {v:'regional',t:'Regional or state DMO',d:'A region, state or county'},
+   {v:'city',t:'City or metropolitan DMO',d:'A city or urban area'},
+   {v:'local',t:'Local or area destination',d:'A town, district or small area'},
+ ]},
+ {key:'objective',q:'What is the main thing you want this to achieve?',help:'Pick the single priority. It tilts where the effort goes.',type:'single',opts:[
+   {v:'awareness',t:'Build international awareness',d:'Be known and considered in new markets'},
+   {v:'dispersal',t:'Spread demand across seasons and areas',d:'Ease pressure, fill the quieter times'},
+   {v:'bookings',t:'Drive bookings and conversion',d:'Turn interest into trips'},
+   {v:'ai-presence',t:'Strengthen presence in AI answers',d:'Be cited, and cited correctly'},
+   {v:'partners',t:'Support partners and local business',d:'Lift the wider destination'},
+ ]},
+ {key:'markets',q:'Where do your visitors mainly come from?',help:'This drives localisation and which channels matter.',type:'single',opts:[
+   {v:'domestic',t:'Mostly domestic',d:'The same country'},
+   {v:'near',t:'Domestic and near-Europe',d:'Short-haul neighbours'},
+   {v:'long',t:'Long-haul international',d:'Other continents'},
+   {v:'mix',t:'A broad mix',d:'No single dominant market'},
+ ]},
+ {key:'audiences',q:'Which audiences matter most to you?',help:'Choose the ones you actively want to win. Select as many as apply.',type:'multi',opts:[
+   {v:'families',t:'Families'},
+   {v:'couples',t:'Couples and romance'},
+   {v:'culture',t:'Culture and heritage'},
+   {v:'outdoors',t:'Outdoors and nature'},
+   {v:'food',t:'Food and drink'},
+   {v:'city',t:'City breaks'},
+   {v:'luxury',t:'Luxury'},
+   {v:'business',t:'Business and events'},
+   {v:'access',t:'Accessible travel'},
+ ]},
+ {key:'contentBase',q:'How strong is your content today?',help:'An honest read. It decides whether we build or refine.',type:'single',opts:[
+   {v:'strong',t:'Strong base, well structured',d:'Good pages, mostly current'},
+   {v:'patchy',t:'Patchy, some good some thin',d:'Uneven quality and gaps'},
+   {v:'minimal',t:'Minimal, early stage',d:'Little in place yet'},
+ ]},
+ {key:'capacity',q:'How much capacity can you give this?',help:'This sizes the plan to what you can actually do.',type:'single',opts:[
+   {v:'limited',t:'Limited, a few hours a cycle',d:'Time is tight'},
+   {v:'moderate',t:'Moderate, a regular slice of a role',d:'Some dedicated time'},
+   {v:'dedicated',t:'Dedicated, one or more people',d:'Real resource'},
+ ]},
+];
+
+/* LABELS */
+const ORG_ADJ={national:'National-scale',regional:'Regional',city:'City',local:'Focused local'};
+const OBJ_PHRASE={awareness:'building international awareness',dispersal:'spreading demand across seasons and areas',bookings:'driving bookings and conversion','ai-presence':'strengthening your presence in AI answers',partners:'supporting partners and local business'};
+const AUD_LABEL={families:'families',couples:'couples',culture:'culture and heritage',outdoors:'outdoors and nature',food:'food and drink',city:'city breaks',luxury:'luxury',business:'business and events',access:'accessible travel'};
+const IN_ORG={national:'National',regional:'Regional DMO',city:'City DMO',local:'Local destination'};
+const IN_OBJ={awareness:'International awareness',dispersal:'Spread demand',bookings:'Bookings',
+'ai-presence':'AI presence',partners:'Support partners'};
+const IN_MK={domestic:'Domestic',near:'Near-Europe',long:'Long-haul',mix:'Broad mix'};
+const IN_BASE={strong:'Strong content',patchy:'Patchy content',minimal:'Early-stage content'};
+const IN_CAP={limited:'Limited capacity',moderate:'Moderate capacity',dedicated:'Dedicated resource'};
+
+/* STRATEGY TEXT */
+const ORG_P1={
+ national:"As a national organisation your leverage is not in individual pages, it is in the sources the models already trust. Concentrate on authority and entity clarity, on the data only you can publish, and on shaping the wider ecosystem your partners depend on.",
+ regional:"As a regional DMO you sit between reach and detail. Your own content needs to be genuinely strong on the themes you own, and you need a deliberate presence in the channels that get cited rather than effort spread thinly across all of them.",
+ city:"As a city DMO most of your visitors arrive with high intent and a short list of decisions to make. Your advantage is decision-useful content, the comparisons and itineraries that answer those decisions directly, backed by accurate profiles where people check.",
+ local:"As a local destination focus is everything. A small number of excellent, accurate pages and well-kept profiles will outperform any attempt to cover everything. Do a few things properly rather than many things thinly."
+};
+const BASE_CLAUSE={
+ strong:" With a strong base already in place, the work is refinement: restructure your best pages so they are easy to quote, add the structured data, and start publishing the things others will cite.",
+ patchy:" With a patchy base, the first move is triage: fix and restructure your highest-value pages, fill the obvious gaps, and bring consistency before you reach for new channels.",
+ minimal:" At an early stage, resist the pull of new channels. Get your core pages answering real questions and your basic entity right first, because everything else depends on it."
+};
+const MARKET_CLAUSE={
+ domestic:"Your visitors are mostly domestic, so localisation is not where your effort should go.",
+ near:"With near-Europe markets in the mix, properly localising your most important pages for your two or three priority languages will open citations you are currently missing.",
+ long:"Because you are reaching long-haul markets, two things matter more than usual: a clear, consistent entity that models can identify across languages, and properly localised content for your priority markets. Long-haul visitors lean on assistants precisely because they lack local knowledge.",
+ mix:"With a broad market mix, prioritise localisation by volume rather than trying to cover every language at once."
+};
+const CAP_CLAUSE={
+ limited:"Given limited capacity, the plan below is deliberately short. Three moves done properly will take you further than a longer list left half finished.",
+ moderate:"With moderate capacity, the plan runs to a handful of moves for the quarter, sequenced so each builds on the last.",
+ dedicated:"With dedicated resource you can run a few of these in parallel, but keep the sequence: foundations before channels."
+};
+
+/* MATRIX DATA */
+const COLS=[['itinerary','Itineraries & trip planning'],['comparison',"Comparison & 'best for'"],['practical','Practical & access'],['seasonal','Seasonal & events'],['data','Original data & insight']];
+const AUD_MATRIX={
+ families:{itinerary:'high',comparison:'high',practical:'high',seasonal:'med',data:null},
+ couples:{itinerary:'high',comparison:'high',practical:'med',seasonal:'high',data:null},
+ culture:{itinerary:'high',comparison:'med',practical:'med',seasonal:'med',data:'high'},
+ outdoors:{itinerary:'high',comparison:'med',practical:'high',seasonal:'high',data:'med'},
+ food:{itinerary:'med',comparison:'high',practical:'med',seasonal:'high',data:'med'},
+ city:{itinerary:'high',comparison:'high',practical:'high',seasonal:'med',data:null},
+ luxury:{itinerary:'high',comparison:'high',practical:null,seasonal:'med',data:'med'},
+ business:{itinerary:'med',comparison:'med',practical:'high',seasonal:null,data:'high'},
+ access:{itinerary:'med',comparison:'med',practical:'high',seasonal:null,data:'high'}
+};
+const OBJ_COL={awareness:'comparison',dispersal:'seasonal',bookings:'itinerary','ai-presence':'data',partners:'data'};
+
+/* CHANNELS */
+const CHAN={
+ own:{label:'Your own website',why:'Where you control the answer, and the source you most want cited.'},
+ wiki:{label:'Wikipedia and Wikidata',why:'Disproportionately trusted by models, and how they work out who you are.'},
+ google:{label:'Google Business and map profiles',why:'Often the structured source an assistant reaches for first.'},
+ ota:{label:'OTA and review profiles',why:'Frequently cited for where to stay and what to do.'},
+ pr:{label:'Digital PR and earned media',why:'Independent coverage is the authority models lean on.'},
+ partner:{label:'Partner and operator content',why:'Extends your reach through sources you can enable.'},
+ social:{label:'Social and creators',why:'Strong for discovery and demand, weaker for direct citation.'},
+ community:{label:'Community, Reddit and forums',why:'Heavily referenced, but only rewards genuine usefulness.'}
+};
+
+/* HELPERS */
+function joinList(arr){if(arr.length<=1)return arr[0]||'';if(arr.length===2)return arr[0]+' and '+arr[1];return arr.slice(0,-1).join(', ')+' and '+arr[arr.length-1];}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+
+/* ENGINE */
+function strategicRead(a){
+  const headline=ORG_ADJ[a.orgType]+' strategy, built around '+OBJ_PHRASE[a.objective];
+  const auds=a.audiences.map(x=>AUD_LABEL[x]);
+  const audSentence=a.audiences.length>4
+    ? "On audiences you have pointed at several, so concentrate first on the two or three you most want to win. The matrix below maps each to the content that earns citations, and marks where to start."
+    : "On audiences you have pointed at "+joinList(auds)+". The matrix below maps each to the content types that earn citations for that kind of visitor, and marks where to start.";
+  const paras=[
+    ORG_P1[a.orgType]+BASE_CLAUSE[a.contentBase],
+    MARKET_CLAUSE[a.markets]+' '+audSentence,
+    CAP_CLAUSE[a.capacity]
+  ];
+  const d=[];
+  if(a.capacity==='limited')d.push(['Breadth','resist adding pages, languages or channels until the core is done well.']);
+  if(a.orgType==='local')d.push(['Scale tactics','heavy PR and Wikipedia campaigns are not where a local destination wins. A few strong pages and well-kept profiles are.']);
+  if(a.orgType==='national'&&a.objective!=='bookings')d.push(['Chasing individual bookings','that is your operators job. Your leverage is the authority and infrastructure that sends visitors to them.']);
+  if(a.contentBase==='minimal')d.push(['Tools and chatbots','an on-site bot or widget will not help until the content behind it exists.']);
+  if(a.contentBase==='strong')d.push(['Starting from scratch','you do not need many new pages so much as better-structured ones. Refine before you build.']);
+  if(a.markets==='domestic')d.push(['Localisation','with a mostly domestic audience it is effort spent for little return.']);
+  if(a.objective==='bookings')d.push(['Reach for its own sake','impressions that do not convert are not the goal here. Favour decision-useful content over broad awareness plays.']);
+  if(a.objective!=='ai-presence')d.push(['Treating schema and llms.txt as the main event','they are hygiene, worth doing once, not a strategy in themselves.']);
+  if(a.objective==='ai-presence')d.push(['Vanity volume','more pages will not help if the few that matter are not clearly the best answer.']);
+  return {headline,paras,depri:d.slice(0,3)};
+}
+
+function startCell(a){
+  const objCol=OBJ_COL[a.objective];
+  let aud=a.audiences.find(x=>AUD_MATRIX[x][objCol]==='high');
+  if(!aud)aud=a.audiences.find(x=>AUD_MATRIX[x][objCol]);
+  if(aud)return{aud,col:objCol};
+  const first=a.audiences[0];
+  const order=['itinerary','comparison','practical','seasonal','data'];
+  const best=order.find(c=>AUD_MATRIX[first][c]==='high')||order.find(c=>AUD_MATRIX[first][c]);
+  return{aud:first,col:best};
+}
+
+function channels(a){
+  const base={
+    national:{own:4,wiki:5,google:2,ota:3,pr:5,partner:4,social:3,community:2},
+    regional:{own:5,wiki:4,google:3,ota:4,pr:4,partner:4,social:3,community:3},
+    city:{own:5,wiki:3,google:4,ota:5,pr:3,partner:3,social:4,community:3},
+    local:{own:5,wiki:2,google:5,ota:5,pr:2,partner:4,social:3,community:3}
+  };
+  const w=Object.assign({},base[a.orgType]);
+  const bump=(k,n)=>{w[k]=Math.max(1,Math.min(5,w[k]+n));};
+  if(a.markets==='long'){bump('wiki',1);bump('pr',1);bump('ota',1);}
+  if(a.markets==='near'){bump('ota',1);bump('partner',1);}
+  if(a.markets==='domestic'){bump('google',1);bump('community',1);bump('wiki',-1);}
+  if(a.objective==='ai-presence'){bump('wiki',1);bump('google',1);}
+  if(a.objective==='partners'){bump('partner',1);}
+  if(a.objective==='bookings'){bump('ota',1);bump('google',1);}
+  if(a.objective==='awareness'){bump('pr',1);bump('social',1);}
+  if(a.objective==='dispersal'){bump('partner',1);bump('own',1);}
+  return Object.keys(w).map(k=>({k,label:CHAN[k].label,why:CHAN[k].why,w:w[k]})).sort((x,y)=>y.w-x.w);
+}
+
+function focusItems(a){
+  const n=a.capacity==='limited'?3:a.capacity==='moderate'?5:7;
+  const auds=a.audiences.map(x=>AUD_LABEL[x]);
+  const audTwo=joinList(auds.slice(0,2));
+  const pool=[];
+  const add=(title,detail,to)=>{if(!pool.some(p=>p.title===title))pool.push({title,detail,to});};
+  if(a.contentBase==='minimal'){
+    add('Answer the core visitor questions on your key pages','Take your handful of most important pages and make each one answer, in its opening lines, the question a visitor actually has. This is the foundation everything else builds on.','checker');
+    add('Establish your destination as a clear entity','Get your name, official site and key facts consistent everywhere, and set up or correct your Wikidata entry, so models know who you are.','checker');
+  } else {
+    add('Run a visibility baseline','Ask the major assistants the questions your visitors ask, and record where you appear, where you do not and what they get wrong. You cannot improve what you have not measured.','plan');
+    if(a.contentBase==='patchy')add('Audit and fix your highest-traffic pages','Score your most-visited pages against the GEO principles, then fix the few that matter most before anything new.','plan');
+    if(a.contentBase==='strong')add('Restructure your top pages to be easy to quote','Your content is strong. Now make it extractable: question-led headings, answers up front, specifics in plain text.','checker');
+  }
+  if(a.objective==='ai-presence'){
+    add('Add schema to your most important pages','Mark up your key pages so machines read them without ambiguity, keeping the markup matched to what is visible.','plan');
+    add('Strengthen your entity and Wikidata presence','Make yourself unmistakable to the models, so they cite you, and cite you correctly.','checker');
+  }
+  if(a.objective==='bookings'){
+    add('Write honest comparison content for '+audTwo,'The decision-useful pages, which area suits which trip, get quoted because they answer what a visitor is deciding.','checker');
+    add('Check your OTA and Google profiles are accurate','These are often cited ahead of your own site. A thin or wrong profile is a citation handed to a competitor.','checker');
+  }
+  if(a.objective==='awareness'){
+    add('Earn places in the round-ups that get cited','Identify the best-of and comparison articles assistants lean on, and pitch a real angle to them.','checker');
+    add('Brief any creator work for discoverability','Weight titles, descriptions and transcripts toward being findable and quotable, not only watchable.','checker');
+  }
+  if(a.objective==='dispersal'){
+    add('Build seasonal and off-peak content','Create genuinely useful content for the quieter seasons and lesser-known areas, where you most want demand to land.','checker');
+    add('Create itineraries that point beyond the honeypots','Give assistants the routes and day-outs that spread visitors, so the answers they generate do too.','checker');
+  }
+  if(a.objective==='partners'){
+    add('Publish data your partners and the models can cite','Turn the data you hold into a clean, linkable reference others point to. It lifts the whole destination.','checker');
+    add('Get into the round-ups that cover your category','Earned inclusion in cited lists extends your partners reach as well as your own.','checker');
+  }
+  if(a.markets==='long'||a.markets==='near'){
+    add('Localise your highest-value pages for priority markets','Properly localise, not just translate, your best pages for your two or three priority source markets.','checker');
+  }
+  if(a.contentBase==='strong'&&a.objective!=='partners'){
+    add('Publish original data as a citable reference','You have the base to become a source others cite. Pick one dataset you own and publish it well.','checker');
+  }
+  add('Set up a monthly check of how you appear','Make the baseline a habit: a short monthly read of your visibility, so you catch drift and errors early.','plan');
+  return pool.slice(0,n);
+}
+
+/* STATE */
+let S={stage:'intake',step:0,answers:{orgType:null,objective:null,markets:null,audiences:[],contentBase:null,capacity:null}};
+
+/* RENDER: INTAKE */
+function renderIntake(){
+  const step=STEPS[S.step];
+  const pct=Math.round(((S.step+1)/STEPS.length)*100);
+  const hasSel=step.type==='multi'?S.answers.audiences.length>0:!!S.answers[step.key];
+  const opts=step.opts.map(o=>{
+    const on=step.type==='multi'?S.answers.audiences.includes(o.v):S.answers[step.key]===o.v;
+    return `<button class="opt ${step.type==='multi'?'multi':''} ${on?'on':''}" data-opt="${o.v}">
+      <span class="opt-tick">${ICO.tick}</span>
+      <span class="opt-body"><span class="opt-t">${o.t}</span>${o.d?`<span class="opt-d">${o.d}</span>`:''}</span>
+    </button>`;
+  }).join('');
+  return `<div class="wizard">
+    <div class="wz-progress"><span style="width:${pct}%"></span></div>
+    <div class="wz-step-l">Step ${S.step+1} of ${STEPS.length}</div>
+    <div class="wz-q">${step.q}</div>
+    <div class="wz-help">${step.help}</div>
+    <div class="opts ${step.type==='multi'?'cols':''}">${opts}</div>
+    <div class="wz-nav">
+      ${S.step>0?'<button class="btn btn-ghost" id="back">Back</button>':''}
+      <div class="spacer"></div>
+      <button class="btn btn-primary" id="next" ${hasSel?'':'disabled'}>${S.step===STEPS.length-1?'Generate my blueprint':'Next'}</button>
+    </div>
+    <div class="mock-note">Mockup. The sidebar is built in Webflow, not in this file. In the live platform your answers and the plan would save to your member profile.</div>
+  </div>`;
+}
+
+/* RENDER: RESULT */
+function secHead(ico,title,sub){
+  return `<div class="sec-head"><div class="sec-ico">${ico}</div><div class="sec-wrap"><div class="sec-title">${title}</div><div class="sec-sub">${sub}</div></div></div>`;
+}
+function renderMatrix(a){
+  const sc=startCell(a);
+  const head=`<div class="mx-row mx-head"><div class="mx-ch">Audience</div>${COLS.map(c=>`<div class="mx-ch">${c[1]}</div>`).join('')}</div>`;
+  const rows=a.audiences.map(aud=>{
+    const cells=COLS.map(c=>{
+      const val=AUD_MATRIX[aud][c[0]];
+      if(sc.aud===aud&&sc.col===c[0])return `<div class="mx-cell"><span class="mx-dot start"></span><span class="mx-start-l">Start</span></div>`;
+      if(val==='high')return `<div class="mx-cell"><span class="mx-dot high"></span></div>`;
+      if(val==='med')return `<div class="mx-cell"><span class="mx-dot med"></span></div>`;
+      return `<div class="mx-cell"><span class="mx-dash">·</span></div>`;
+    }).join('');
+    return `<div class="mx-row"><div class="mx-aud">${AUD_LABEL[aud]}</div>${cells}</div>`;
+  }).join('');
+  return `<div class="matrix"><div class="mx-grid">${head}${rows}</div></div>
+    <div class="mx-legend"><span><span class="mx-dot start"></span> Start here</span><span><span class="mx-dot high"></span> Priority</span><span><span class="mx-dot med"></span> Worth doing</span></div>`;
+}
+function renderChannels(a){
+  return `<div class="chan">${channels(a).map(c=>{
+    const lead=c.w>=5;
+    return `<div class="chan-row ${lead?'lead':''}"><div class="chan-name">${c.label}${lead?'<span class="lead-tag">Lead</span>':''}</div><div class="chan-r"><div class="chan-bar"><span style="width:${c.w/5*100}%"></span></div><div class="chan-why">${c.why}</div></div></div>`;
+  }).join('')}</div>`;
+}
+function renderFocus(a){
+  const TASK_MAP={'Run a visibility baseline':1,'Audit and fix your highest-traffic pages':2,'Add schema to your most important pages':6,'Set up a monthly check of how you appear':12};
+  return `<div class="focus">${focusItems(a).map((f,i)=>{
+    const link=f.to==='plan'
+      ? `<a class="fc-link" href="implementation-programme.html?focus=${TASK_MAP[f.title]||1}&from=advisor" target="_blank" rel="noopener">${ICO.arrow} Open in your plan</a>`
+      : `<a class="fc-link" href="tactics-ethics-checker.html" target="_blank" rel="noopener">${ICO.arrow} See in the checker</a>`;
+    return `<div class="fc-item"><div class="fc-n">${i+1}</div><div><div class="fc-t">${f.title}</div><div class="fc-d">${f.detail}</div>${link}</div></div>`;
+  }).join('')}</div>`;
+}
+function renderResult(){
+  const a=S.answers;
+  const sr=strategicRead(a);
+  const chips=[IN_ORG[a.orgType],IN_OBJ[a.objective],IN_MK[a.markets],
+    a.audiences.length<=3?joinList(a.audiences.map(x=>AUD_LABEL[x])):a.audiences.length+' audiences',
+    IN_BASE[a.contentBase],IN_CAP[a.capacity]];
+  const today=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const navyLogo='<svg viewBox="0 0 733 710" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M677.748 688.086L345.283 597.113L521.027 224.124L732.332 333.705L677.748 688.086Z" fill="#0F2044"/><path d="M332.468 593.803L180.295 710L184.43 251.827L458.59 324.192L332.468 593.803Z" fill="#0F2044"/><path d="M463.137 310.962L187.323 238.183L505.315 224.124L463.137 310.962Z" fill="#0F2044"/><path d="M342.806 1.23719L189.393 226.189L513.174 209.235L568.171 66.9859L342.806 1.23719Z" fill="#0F2044"/><path d="M174.916 225.365L172.849 347.351L0 241.492L52.9297 0L273.746 79.8081L174.916 225.365Z" fill="#0F2044"/></svg>';
+  return `
+  <div class="print-cover">
+    <div class="pc-logo">${navyLogo}<span>Digital Tourism<br>Think Tank</span></div>
+    <div class="pc-eyebrow">Knowledge Programme · AI Discoverability</div>
+    <div class="pc-title">Content and GEO<br>Strategy Advisor</div>
+    <div class="pc-sub">A prescriptive content and GEO plan, shaped to your organisation, markets and capacity.</div>
+    <div class="pc-meta">
+      <div class="pc-org">Prepared for Visit Skåne</div>
+      <div class="pc-date">${today}</div>
+    </div>
+  </div>
+
+  <div class="input-strip">
+    ${chips.map(c=>`<span class="in-chip">${c}</span>`).join('')}
+    <button class="in-revise" data-revise>${ICO.edit} Revise answers</button>
+  </div>
+
+  <div class="bp-head">
+    <div class="bp-eyebrow">Your strategy</div>
+    <div class="bp-title">${sr.headline}</div>
+    ${sr.paras.map(p=>`<div class="bp-para">${p}</div>`).join('')}
+  </div>
+
+  <div class="depri">
+    <div class="depri-l">${ICO.warn} Deprioritise</div>
+    ${sr.depri.map(d=>`<div class="depri-item"><span class="x">×</span><div><strong>${d[0]}.</strong> ${d[1]}</div></div>`).join('')}
+  </div>
+
+  ${secHead(ICO.map,'Content focus matrix','Your audiences against the content types that earn citations, with where to begin.')}
+  ${renderMatrix(a)}
+
+  ${secHead(ICO.layers,'Channel weighting','Where to put effort beyond your own site, tilted to your type and markets.')}
+  ${renderChannels(a)}
+
+  ${secHead(ICO.list,'Focus for the next quarter','Sequenced and sized to your capacity. Start at the top.')}
+  ${renderFocus(a)}
+
+  ${secHead(ICO.compass,'Where this goes next','How the strategy becomes judgements and tasks.')}
+  <div class="where">
+    <div class="where-l">From strategy to action</div>
+    <div class="where-d">This plan sets the direction. The Tactics and Ethics Checker judges any specific tactic you are weighing, and the Implementation Programme holds the tasks and tracks progress. The Readiness Diagnostic is the companion check on whether you can execute. Together they take you from where to focus, to what to do, to done.</div>
+    <div class="where-links">
+      <a class="where-link" href="tactics-ethics-checker.html" target="_blank" rel="noopener">${ICO.ext} Tactics and Ethics Checker</a>
+      <a class="where-link" href="implementation-programme.html" target="_blank" rel="noopener">${ICO.ext} Implementation Programme</a>
+    </div>
+  </div>
+
+  <div class="result-actions">
+    <button class="btn btn-primary" id="download">${ICO.download} Download as PDF</button>
+    <button class="btn btn-ghost" data-revise>${ICO.edit} Revise answers</button>
+    <button class="btn btn-ghost" id="restart">Start again</button>
+  </div>
+  <div class="mock-note">Mockup. In the live platform this plan saves to your member profile, Download produces a branded PDF, and the focus items write through to your Implementation Programme. The logic here is a transparent heuristic. An AI-powered version that writes a bespoke narrative is the natural later upgrade.</div>
+  <div class="print-footer">Digital Tourism Think Tank · Knowledge Programme · AI Discoverability · thinkdigital.travel</div>
+  `;
+}
+
+function render(){
+  document.getElementById('page').innerHTML=S.stage==='intake'?renderIntake():renderResult();
+  bind();
+}
+
+function bind(){
+  if(S.stage==='intake'){
+    document.querySelectorAll('[data-opt]').forEach(el=>el.addEventListener('click',()=>{
+      const step=STEPS[S.step],v=el.dataset.opt;
+      if(step.type==='multi'){
+        const arr=S.answers.audiences.slice();const i=arr.indexOf(v);
+        if(i>=0)arr.splice(i,1);else arr.push(v);
+        S.answers.audiences=arr;
+      } else {S.answers[step.key]=v;}
+      render();
+    }));
+    const next=document.getElementById('next');
+    if(next)next.addEventListener('click',()=>{
+      if(S.step<STEPS.length-1){S.step++;}else{S.stage='result';}
+      render();window.scrollTo(0,0);
+    });
+    const back=document.getElementById('back');
+    if(back)back.addEventListener('click',()=>{if(S.step>0){S.step--;render();window.scrollTo(0,0);}});
+  } else {
+    const dl=document.getElementById('download');
+    if(dl)dl.addEventListener('click',()=>window.print());
+    document.querySelectorAll('[data-revise]').forEach(el=>el.addEventListener('click',()=>{S.stage='intake';S.step=0;render();window.scrollTo(0,0);}));
+    const rs=document.getElementById('restart');
+    if(rs)rs.addEventListener('click',()=>{S.answers={orgType:null,objective:null,markets:null,audiences:[],contentBase:null,capacity:null};S.step=0;S.stage='intake';render();window.scrollTo(0,0);});
+  }
+}
+
+render();
+</script>
+</body>
+</html>

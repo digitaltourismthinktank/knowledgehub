@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Implementation Programme · AI Discoverability · DTTT Member Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F2044;--navy-deep:#0A1733;--navy-mid:#1A3060;--navy-light:#E8EDF5;--navy-rule:#CBD5E8;
+  --teal:#00857C;--teal-dark:#006B63;--teal-light:#E6F3F2;--teal-text:#006B63;
+  --white:#FFFFFF;--bg:#F7F8FA;--surface:#FFFFFF;--border:#E2E6EF;
+  --text:#0F2044;--sub:#4A5568;--muted:#8A94A6;
+  --green:#1A7A4A;--green-l:#E6F4ED;
+  --amber:#925A00;--amber-l:#FEF3E2;
+  --red:#9B1C1C;--red-l:#FEF2F2;
+  --font:'Inter',-apple-system,sans-serif;
+  --font-alt:'IBM Plex Sans',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:.875rem;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+.app{display:flex;min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* SIDEBAR (mockup only, built in Webflow) */
+.sidebar{width:256px;min-width:256px;background:var(--navy-deep);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;box-shadow:inset -1px 0 0 rgba(255,255,255,.07),6px 0 28px rgba(10,23,51,.22);z-index:2}
+.sb-top{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sb-logo{margin-bottom:15px;display:flex;align-items:center;gap:9px}
+.sb-logo svg{height:26px;width:auto}
+.sb-logo span{font-family:var(--font-alt);font-size:.6875rem;font-weight:600;color:#fff;letter-spacing:.02em;line-height:1.15;opacity:.9}
+.sb-org{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:4px;background:rgba(255,255,255,.05);cursor:pointer;transition:background .14s}
+.sb-org:hover{background:rgba(255,255,255,.09)}
+.sb-org-mark{width:30px;height:30px;border-radius:4px;background:linear-gradient(135deg,#27457E,#16284E);display:flex;align-items:center;justify-content:center;font-family:var(--font-alt);font-weight:700;font-size:.8125rem;color:#fff;flex-shrink:0}
+.sb-org-info{min-width:0;flex:1}
+.sb-org-name{font-family:var(--font-alt);font-size:.8125rem;font-weight:600;color:#fff;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-org-tier{display:flex;align-items:center;gap:5px;font-size:.625rem;color:rgba(255,255,255,.5);font-family:var(--font-mono);letter-spacing:.02em;margin-top:2px}
+.sb-org-tier .dot{width:5px;height:5px;border-radius:50%;background:#8FA4C8}
+.sb-nav{flex:1;overflow-y:auto;padding:10px 12px}
+.sb-nav::-webkit-scrollbar{width:0}
+.sb-back{display:flex;align-items:center;gap:8px;padding:8px 11px;margin:0 0 6px;font-size:.75rem;font-weight:500;color:rgba(255,255,255,.5);font-family:var(--font-alt);cursor:pointer;border-radius:4px;transition:all .14s;border:none;background:none;width:100%;text-align:left}
+.sb-back:hover{color:#fff;background:rgba(255,255,255,.06)}
+.sb-back svg{width:14px;height:14px;flex-shrink:0;opacity:.85}
+.sb-section{font-size:.5625rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.26);padding:14px 10px 6px;font-family:var(--font-alt)}
+.ni{display:flex;align-items:center;gap:11px;padding:8px 11px;cursor:pointer;font-size:.8125rem;font-weight:400;color:rgba(255,255,255,.55);transition:all .14s;border-radius:4px;margin-bottom:1px;border:none;background:none;width:100%;text-align:left}
+.ni:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.06)}
+.ni.on{color:#fff;background:rgba(255,255,255,.1);font-weight:500}
+.ni .use-dot{margin-left:auto;width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.sb-foot{padding:10px 12px 14px;border-top:1px solid rgba(255,255,255,.07)}
+.sb-user{display:flex;align-items:center;gap:10px;padding:9px 10px}
+.sb-ava{width:30px;height:30px;border-radius:50%;background:#27457E;display:flex;align-items:center;justify-content:center;font-size:.6875rem;font-weight:600;color:#fff;font-family:var(--font-alt);flex-shrink:0}
+.sb-user-info{min-width:0;flex:1}
+.sb-user-name{font-size:.75rem;font-weight:500;color:rgba(255,255,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user-role{font-size:.625rem;color:rgba(255,255,255,.4)}
+
+/* MAIN */
+.main-col{flex:1;min-width:0;background:var(--bg)}
+.top-bar{background:var(--navy)}
+.top-bar-inner{padding:1.9rem 2.75rem;max-width:1180px}
+.bc{font-size:.6875rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.85rem;display:flex;align-items:center;gap:.55rem;font-family:var(--font-alt)}
+.bc .sep{color:rgba(255,255,255,.22)}
+h1.pt{font-family:var(--font-alt);font-size:1.85rem;font-weight:600;color:#fff;line-height:1.14;letter-spacing:-.02em;margin-bottom:.5rem}
+.ps{font-size:.9375rem;font-weight:300;color:rgba(255,255,255,.64);max-width:660px;line-height:1.6}
+
+.page{padding:1.9rem 2.75rem 4rem;max-width:1180px;animation:up .2s ease}
+@keyframes up{from{transform:translateY(5px)}to{transform:none}}
+
+.sec-head{display:flex;align-items:center;gap:.7rem;margin-bottom:1.05rem}
+.sec-ico{width:30px;height:30px;border-radius:4px;background:var(--teal-light);color:var(--teal-dark);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-ico svg{width:16px;height:16px}
+.sec-title{font-family:var(--font-alt);font-size:1.0625rem;font-weight:600;color:var(--navy);letter-spacing:-.01em}
+
+/* SUMMARY */
+.plan-sum{display:flex;align-items:center;gap:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1rem 1.3rem;margin-bottom:1.4rem;flex-wrap:wrap}
+.plan-sum-v{font-family:var(--font-alt);font-size:1.5rem;font-weight:600;color:var(--navy);line-height:1}
+.plan-sum-v span{font-size:1rem;color:var(--muted)}
+.plan-sum-l{font-size:.75rem;color:var(--sub);font-weight:300}
+.plan-bar{flex:1;min-width:160px;height:6px;background:var(--navy-light);border-radius:3px;overflow:hidden}
+.plan-bar-fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--teal));border-radius:3px;transition:width .5s ease}
+.plan-pct{font-family:var(--font-mono);font-size:.8125rem;font-weight:500;color:var(--teal-dark)}
+
+/* CONTROLS */
+.ctrls{display:flex;flex-direction:column;gap:.8rem;margin-bottom:1.25rem}
+.fgroup{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.fgroup-l{font-size:.5625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:var(--font-alt);margin-right:.25rem}
+.fpill{font-size:.75rem;font-weight:500;font-family:var(--font-alt);color:var(--sub);background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:.35rem .7rem;cursor:pointer;transition:all .13s}
+.fpill:hover{border-color:var(--navy-rule)}
+.fpill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.csv-btn{margin-left:auto;font-size:.6875rem;font-weight:600;font-family:var(--font-alt);color:#fff;background:var(--teal);border:none;border-radius:3px;padding:.45rem .9rem;cursor:pointer;display:inline-flex;align-items:center;gap:.45rem;transition:background .14s}
+.csv-btn:hover{background:var(--teal-dark)}
+.csv-btn svg{width:13px;height:13px}
+
+/* PHASES */
+.phase{margin-bottom:1.5rem}
+.phase-head{display:flex;align-items:center;gap:.7rem;padding:.8rem 1.1rem;background:var(--navy-light);border:1px solid var(--border);border-bottom:none;border-radius:4px 4px 0 0}
+.phase-n{font-family:var(--font-mono);font-size:.6875rem;color:var(--navy);font-weight:500;background:var(--white);border:1px solid var(--navy-rule);border-radius:3px;padding:.18rem .5rem}
+.phase-name{font-family:var(--font-alt);font-size:.9375rem;font-weight:600;color:var(--navy)}
+.phase-hz{margin-left:auto;font-size:.5625rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-family:var(--font-alt);padding:.24rem .6rem;border-radius:3px}
+.phase-hz.p1{background:var(--red-l);color:var(--red)}
+.phase-hz.p2{background:var(--amber-l);color:var(--amber)}
+.phase-hz.p3{background:var(--green-l);color:var(--green)}
+.phase-ms{font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.55;padding:.75rem 1.1rem;background:var(--surface);border-left:1px solid var(--border);border-right:1px solid var(--border)}
+
+.ptable{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 4px 4px;overflow:hidden}
+.ptable th{text-align:left;font-size:.5625rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;font-family:var(--font-alt);padding:.7rem .9rem;border-bottom:1px solid var(--border);background:var(--bg)}
+.ptable td{padding:.85rem .9rem;border-bottom:1px solid var(--border);font-size:.8125rem;vertical-align:top}
+.ptable tr:last-child td{border-bottom:none}
+.task-t{font-family:var(--font-alt);font-weight:600;color:var(--text);margin-bottom:.25rem;line-height:1.35}
+.task-d{font-size:.75rem;color:var(--sub);font-weight:300;line-height:1.5}
+.task-chips{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.55rem}
+.tchip{font-size:.5625rem;font-weight:600;letter-spacing:.04em;font-family:var(--font-alt);padding:.2rem .5rem;border-radius:3px;background:var(--bg);border:1px solid var(--border);color:var(--muted)}
+.tchip.res{background:var(--navy-light);border-color:var(--navy-rule);color:var(--navy)}
+.owner{font-size:.8125rem;font-weight:500;color:var(--text)}
+.effb-sq{font-family:var(--font-mono);font-size:.6875rem;font-weight:700;width:24px;height:24px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center}
+.effb-sq.S{background:var(--green-l);color:var(--green)}
+.effb-sq.M{background:var(--amber-l);color:var(--amber)}
+.effb-sq.L{background:var(--red-l);color:var(--red)}
+.prio{font-size:.625rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-family:var(--font-alt);padding:.22rem .55rem;border-radius:3px;white-space:nowrap}
+.prio.High{background:var(--red-l);color:var(--red)}
+.prio.Med{background:var(--amber-l);color:var(--amber)}
+.prio.Low{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+.stbtn{font-size:.625rem;font-weight:600;font-family:var(--font-alt);padding:.34rem .7rem;border-radius:3px;border:1px solid;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:.4rem;background:none;transition:all .13s}
+.stbtn .d{width:6px;height:6px;border-radius:50%}
+.st0{border-color:var(--border);color:var(--muted)}.st0 .d{background:var(--muted)}
+.st1{border-color:#E8C98A;color:var(--amber);background:var(--amber-l)}.st1 .d{background:var(--amber)}
+.st2{border-color:#A7D7B8;color:var(--green);background:var(--green-l)}.st2 .d{background:var(--green)}
+.keyfn{font-size:.6875rem;color:var(--muted);line-height:1.55;margin-top:.7rem;font-weight:300}
+.srcbadge{font-size:.5rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-family:var(--font-alt);padding:.16rem .42rem;border-radius:3px;background:var(--teal-light);color:var(--teal-dark);margin-left:.5rem;vertical-align:middle;white-space:nowrap}
+.srcbadge.you{background:var(--navy-light);color:var(--navy)}
+tr.added td:first-child{box-shadow:inset 3px 0 0 var(--teal)}
+.task-rm{background:none;border:none;cursor:pointer;color:var(--muted);font-size:1rem;line-height:1;padding:.05rem .35rem;border-radius:3px;margin-left:.4rem;vertical-align:middle}
+.task-rm:hover{color:var(--red);background:var(--red-l)}
+tr.focusrow td{animation:flash 2.2s ease}
+@keyframes flash{0%,100%{background:var(--surface)}20%,55%{background:var(--teal-light)}}
+.arrive{display:flex;align-items:center;gap:.7rem;background:var(--teal-light);border:1px solid #A9D8D3;border-radius:4px;padding:.8rem 1.05rem;margin-bottom:1.4rem}
+.arrive svg{width:16px;height:16px;color:var(--teal-dark);flex-shrink:0}
+.arrive-t{font-size:.8125rem;color:var(--teal-dark);font-weight:400;flex:1;line-height:1.4}
+.arrive-t strong{font-weight:700}
+.arrive-x{background:none;border:none;color:var(--teal-dark);cursor:pointer;font-size:1.1rem;line-height:1;opacity:.55;padding:.1rem .4rem}
+.arrive-x:hover{opacity:1}
+.addrow{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;background:var(--surface);border:1px dashed var(--navy-rule);border-radius:4px;padding:.9rem 1.1rem;margin-top:1.1rem}
+.addrow-l{font-size:.5625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:var(--font-alt);width:100%}
+.addrow input{flex:1;min-width:200px;font-family:var(--font);font-size:.8125rem;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:.55rem .8rem}
+.addrow input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,133,124,.1)}
+.addrow select{font-family:var(--font-alt);font-size:.75rem;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:.5rem .55rem;cursor:pointer}
+.addrow .add-b{font-family:var(--font-alt);font-size:.75rem;font-weight:600;color:#fff;background:var(--navy);border:none;border-radius:4px;padding:.55rem 1rem;cursor:pointer}
+.addrow .add-b:hover{background:var(--navy-mid)}
+.empty{padding:2.5rem;text-align:center;color:var(--muted);font-size:.8125rem;background:var(--surface);border:1px solid var(--border);border-radius:4px}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sb-top">
+      <div class="sb-logo">
+        <svg viewBox="0 0 733 710" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M677.748 688.086L345.283 597.113L521.027 224.124L732.332 333.705L677.748 688.086Z" fill="white"/><path d="M332.468 593.803L180.295 710L184.43 251.827L458.59 324.192L332.468 593.803Z" fill="white"/><path d="M463.137 310.962L187.323 238.183L505.315 224.124L463.137 310.962Z" fill="white"/><path d="M342.806 1.23719L189.393 226.189L513.174 209.235L568.171 66.9859L342.806 1.23719Z" fill="white"/><path d="M174.916 225.365L172.849 347.351L0 241.492L52.9297 0L273.746 79.8081L174.916 225.365Z" fill="white"/></svg>
+        <span>Digital Tourism<br>Think Tank</span>
+      </div>
+      <div class="sb-org">
+        <div class="sb-org-mark">VS</div>
+        <div class="sb-org-info">
+          <div class="sb-org-name">Visit Skåne</div>
+          <div class="sb-org-tier"><span class="dot"></span>Evolve member</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <button class="sb-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        Back to Knowledge Hub
+      </button>
+      <div class="sb-section">AI Discoverability</div>
+      <button class="ni">Overview</button>
+      <button class="ni">Research snapshot</button>
+      <button class="ni">Deep dive</button>
+      <button class="ni">Best practice</button>
+      <button class="ni">Readiness diagnostic<span class="use-dot"></span></button>
+      <button class="ni on">Tools<span class="use-dot"></span></button>
+      <button class="ni">Resources</button>
+    </nav>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-ava">HM</div>
+        <div class="sb-user-info">
+          <div class="sb-user-name">Helen Magnusson</div>
+          <div class="sb-user-role">Head of Digital</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-col">
+    <div class="top-bar">
+      <div class="top-bar-inner">
+        <div class="bc">Knowledge Hub <span class="sep">/</span> AI Discoverability <span class="sep">/</span> Tools</div>
+        <h1 class="pt">Implementation Programme</h1>
+        <div class="ps">A template backlog for acting on the AI Discoverability research. It turns the readiness diagnostic roadmap into specific tasks across three phases, each with an owner, an effort estimate and the resource that supports it. Items you send over from the Strategy Advisor and the Tactics and Ethics Checker land here too.</div>
+      </div>
+    </div>
+    <div class="page" id="page"></div>
+  </div>
+</div>
+
+<script>
+const PHASES={
+ 1:{label:'Foundations',horizon:'Next 30 days',cls:'p1',ms:'Establish your baseline and fix your highest-traffic content. Nothing here needs budget sign-off, so it can start immediately.'},
+ 2:{label:'Infrastructure',horizon:'30 to 90 days',cls:'p2',ms:'Put the structural foundations in place before deploying tools. This is where most sustainable implementations are won or lost.'},
+ 3:{label:'Governance and scale',horizon:'90 days and beyond',cls:'p3',ms:'Govern, measure and sequence the next investment. Address your lowest-scoring diagnostic dimension first.'},
+};
+const PLAN=[
+ {id:1,phase:1,title:'Run an LLM visibility baseline',desc:"Search your top ten visitor queries in ChatGPT, Gemini and Perplexity. Record where you appear and what information is cited. This becomes the benchmark you measure everything against.",owner:'Digital / Content lead',eff:'M',prio:'High',res:'LLM monitoring tracker'},
+ {id:2,phase:1,title:'Audit your highest-traffic pages against the GEO principles',desc:"Score your fifty most-visited pages against the five GEO principles. Identify which are inspirational only and which actually answer visitor questions.",owner:'Content',eff:'M',prio:'High',res:'GEO content audit worksheet'},
+ {id:3,phase:1,title:'Rewrite your three highest-traffic pages',desc:"Apply the GEO rewrite brief to the three pages with the most search traffic. Prove the approach on the pages that matter most before scaling it.",owner:'Content',eff:'M',prio:'High',res:'GEO content audit worksheet',dep:2},
+ {id:4,phase:1,title:'Map the data feeds your AI ambitions depend on',desc:"List the events, accommodation and availability feeds any future tool would need, and note who owns each one. Data ownership is the constraint most DMOs discover too late.",owner:'Digital lead',eff:'S',prio:'Med'},
+ {id:5,phase:1,title:'Brief leadership on the diagnostic findings',desc:"Take the readiness diagnostic results to your leadership team, focusing on the governance and capacity gaps, so the resourcing decisions are made with full awareness.",owner:'Head of Digital',eff:'S',prio:'High'},
+ {id:6,phase:2,title:'Implement schema.org markup on your top 20 pages',desc:"Add TouristDestination, TouristAttraction and Event entity types. Structured content is the single biggest lever on whether you are cited in AI responses.",owner:'Developer / Agency',eff:'L',prio:'High',res:'Schema implementation guide',dep:2},
+ {id:7,phase:2,title:'Assign named editorial ownership for every AI tool',desc:"For any tool you run or plan to run, assign a named person, define the weekly time allocation and put it in writing. Tools without an owner are the ones that get abandoned.",owner:'Head of Digital',eff:'S',prio:'High'},
+ {id:8,phase:2,title:'Run a vendor assessment for semantic site search',desc:"Evaluate vendors against the procurement matrix: data ownership, maintenance obligations, support SLAs and exit conditions. This is likely your highest-ROI near-term AI investment.",owner:'Digital lead',eff:'M',prio:'Med',res:'AI tool procurement matrix'},
+ {id:9,phase:2,title:'Complete the pre-launch checklist for any tool nearing deployment',desc:"Work through the checklist covering content foundations, feed stability, maintenance plan, ownership and success metrics before going live.",owner:'Digital lead',eff:'M',prio:'Med',res:'Pre-launch checklist',dep:7},
+ {id:10,phase:2,title:'Stabilise the data feeds your priority tool depends on',desc:"Confirm SLAs for the one or two feeds your first tool will rely on. A tool is only as stable as the data behind it.",owner:'Digital lead + partner',eff:'M',prio:'Med',dep:4},
+ {id:11,phase:3,title:'Adopt an AI governance framework before expanding adoption',desc:"Set content disclosure standards using the DTTT AI Transparency Framework, define a vendor assessment process and a quarterly review. Governance retrofitted later is far harder.",owner:'Head of Digital + Legal',eff:'L',prio:'High',res:'AI governance starter pack',dep:5},
+ {id:12,phase:3,title:'Establish a monthly GEO monitoring protocol',desc:"Track twenty benchmark queries across three platforms in a shared sheet, every month. Visibility is not a one-time audit, it shifts as models update.",owner:'Content',eff:'S',prio:'Med',res:'LLM monitoring tracker',dep:1},
+ {id:13,phase:3,title:'Set success metrics for each live AI tool',desc:"Define what good looks like for every tool and review quarterly. Retire anything that is not earning its maintenance time.",owner:'Digital lead',eff:'S',prio:'Med'},
+ {id:14,phase:3,title:'Sequence your next major investment from the gap analysis',desc:"Use the diagnostic gap analysis to decide what comes next. Address your lowest-scoring dimension first, it is almost always the binding constraint on everything else.",owner:'Strategy lead',eff:'M',prio:'Med'},
+ {id:15,phase:3,title:'Build a lightweight team training outline',desc:"A short, practical guide to how your team uses AI and discloses it. Keeps standards consistent as adoption widens.",owner:'Head of Digital',eff:'M',prio:'Low',res:'AI governance starter pack',dep:11},
+];
+
+let S={phase:'all',prio:'all',quick:false,status:{},added:[],focusId:null,banner:null,_scrolled:false};
+let addSeq=0;
+const SRC_LABEL={checker:'the Tactics and Ethics Checker',advisor:'the Strategy Advisor',benchmark:'the GEO Benchmark',you:'you'};
+const SRC_SHORT={checker:'From the Checker',advisor:'From the Advisor',benchmark:'From the Benchmark',you:'Added by you'};
+function allTasks(){return PLAN.concat(S.added);}
+function clampPhase(p){p=parseInt(p);return (p===1||p===2||p===3)?p:1;}
+function addTask(o,fromURL){
+  const title=(o.t||'').trim();if(!title)return;
+  const exists=allTasks().some(x=>x.title.toLowerCase()===title.toLowerCase());
+  if(!exists){
+    S.added.push({id:'a'+(++addSeq),phase:clampPhase(o.p),title:title,desc:o.d||'',owner:o.o||'To assign',eff:(o.e==='S'||o.e==='L')?o.e:'M',prio:(o.pr==='High'||o.pr==='Low')?o.pr:'Med',source:SRC_LABEL[o.s]?o.s:'you'});
+  }
+  if(fromURL)S.banner={kind:'add',src:SRC_LABEL[o.s]||'a linked tool',title:title,dup:exists};
+}
+(function initFromURL(){
+  const q=new URLSearchParams(location.search);
+  const from=q.get('from');
+  if(q.get('focus')){const id=parseInt(q.get('focus'));const t=PLAN.find(x=>x.id===id);if(t){S.focusId=id;S.banner={kind:'focus',src:SRC_LABEL[from]||'a linked tool',title:t.title};}}
+  if(q.get('add')){try{addTask(JSON.parse(decodeURIComponent(q.get('add'))),true);}catch(e){}}
+})();
+function st(id){return S.status[id]||0;}
+function doneCount(){return allTasks().filter(t=>st(t.id)===2).length;}
+function set(p){Object.assign(S,p);render();}
+function filtered(){
+  return allTasks().filter(t=>{
+    if(S.phase!=='all'&&t.phase!==parseInt(S.phase))return false;
+    if(S.prio!=='all'&&t.prio!==S.prio)return false;
+    if(S.quick&&t.eff!=='S')return false;
+    return true;
+  });
+}
+const stLabels=['Not started','In progress','Done'];
+function stbtn(id){const s=st(id);return `<button class="stbtn st${s}" data-st="${id}"><span class="d"></span>${stLabels[s]}</button>`;}
+
+function render(){
+  const total=allTasks().length,done=doneCount(),pct=total?Math.round(done/total*100):0;
+  const rows=filtered();
+  const phases=[1,2,3].filter(p=>rows.some(t=>t.phase===p));
+  const phaseHTML=rows.length===0?`<div class="empty">No tasks match these filters. Clear them to see the full programme.</div>`:phases.map(p=>{
+    const ph=PHASES[p];const tasks=rows.filter(t=>t.phase===p);
+    return `<div class="phase">
+      <div class="phase-head"><span class="phase-n">Phase ${p}</span><span class="phase-name">${ph.label}</span><span class="phase-hz ${ph.cls}">${ph.horizon}</span></div>
+      <div class="phase-ms">${ph.ms}</div>
+      <table class="ptable">
+        <thead><tr><th style="width:48%">Task</th><th>Owner</th><th>Effort</th><th>Priority</th><th>Status</th></tr></thead>
+        <tbody>
+        ${tasks.map(t=>`<tr class="${t.source?'added':''} ${t.id===S.focusId?'focusrow':''}">
+          <td>
+            <div class="task-t">${t.title}${t.source?`<span class="srcbadge ${t.source}">${SRC_SHORT[t.source]}</span>`:''}</div>
+            <div class="task-d">${t.desc}</div>
+            ${(t.res||t.dep)?`<div class="task-chips">${t.res?`<span class="tchip res">${t.res}</span>`:''}${t.dep?`<span class="tchip">After task ${t.dep}</span>`:''}</div>`:''}
+          </td>
+          <td class="owner">${t.owner}</td>
+          <td><span class="effb-sq ${t.eff}" title="${t.eff==='S'?'Small':t.eff==='M'?'Medium':'Large'} effort">${t.eff}</span></td>
+          <td><span class="prio ${t.prio}">${t.prio}</span></td>
+          <td>${stbtn(t.id)}${t.source?`<button class="task-rm" data-rm="${t.id}" title="Remove this task">×</button>`:''}</td>
+        </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  }).join('');
+
+  const bannerHTML=S.banner?`<div class="arrive"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><div class="arrive-t">${S.banner.kind==='focus'?`Highlighted from ${S.banner.src}: <strong>${S.banner.title}</strong>`:S.banner.dup?`<strong>${S.banner.title}</strong> is already in your programme.`:`Added from ${S.banner.src}: <strong>${S.banner.title}</strong>`}</div><button class="arrive-x" id="arrive-x" title="Dismiss">×</button></div>`:'';
+  document.getElementById('page').innerHTML=`
+  ${bannerHTML}
+  <div class="plan-sum">
+    <div><div class="plan-sum-v">${done}<span>/${total}</span></div><div class="plan-sum-l">tasks complete</div></div>
+    <div class="plan-bar"><div class="plan-bar-fill" style="width:${pct}%"></div></div>
+    <div class="plan-pct">${pct}%</div>
+  </div>
+
+  <div class="sec-head">
+    <div class="sec-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+    <div class="sec-title">The backlog</div>
+  </div>
+
+  <div class="ctrls">
+    <div class="fgroup"><span class="fgroup-l">Phase</span>
+      ${[['all','All'],['1','Phase 1'],['2','Phase 2'],['3','Phase 3']].map(([k,l])=>`<button class="fpill ${S.phase===k?'on':''}" data-phase="${k}">${l}</button>`).join('')}
+    </div>
+    <div class="fgroup"><span class="fgroup-l">Priority</span>
+      ${[['all','All'],['High','High'],['Med','Medium'],['Low','Low']].map(([k,l])=>`<button class="fpill ${S.prio===k?'on':''}" data-prio="${k}">${l}</button>`).join('')}
+      <button class="fpill ${S.quick?'on':''}" data-quick="1" style="margin-left:.5rem">Quick wins only</button>
+      <button class="csv-btn" id="csv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download CSV</button>
+    </div>
+  </div>
+
+  ${phaseHTML}
+
+  <div class="addrow">
+    <span class="addrow-l">Add your own task</span>
+    <input id="addtask-in" type="text" placeholder="Describe a task to add to your programme">
+    <select id="addtask-phase">
+      <option value="1">Phase 1</option><option value="2">Phase 2</option><option value="3">Phase 3</option>
+    </select>
+    <button class="add-b" id="addtask-btn">Add task</button>
+  </div>
+
+  <div class="keyfn">Effort key: <strong style="color:var(--green)">S</strong> small, under a day. <strong style="color:var(--amber)">M</strong> medium, a few days. <strong style="color:var(--red)">L</strong> large, a sustained piece of work. Status changes and CSV export run in your browser. In the live platform these would persist to your member profile.</div>
+  `;
+  bind();
+}
+
+function bind(){
+  document.querySelectorAll('.fpill[data-phase]').forEach(el=>el.addEventListener('click',()=>set({phase:el.dataset.phase})));
+  document.querySelectorAll('.fpill[data-prio]').forEach(el=>el.addEventListener('click',()=>set({prio:el.dataset.prio})));
+  const q=document.querySelector('.fpill[data-quick]');if(q)q.addEventListener('click',()=>set({quick:!S.quick}));
+  document.querySelectorAll('.stbtn[data-st]').forEach(el=>el.addEventListener('click',()=>{const id=el.dataset.st;set({status:{...S.status,[id]:(st(id)+1)%3}});}));
+  document.querySelectorAll('.task-rm[data-rm]').forEach(el=>el.addEventListener('click',()=>{const id=el.dataset.rm;S.added=S.added.filter(t=>t.id!==id);delete S.status[id];render();}));
+  const csv=document.getElementById('csv');if(csv)csv.addEventListener('click',exportCSV);
+  const ax=document.getElementById('arrive-x');if(ax)ax.addEventListener('click',()=>{S.banner=null;S.focusId=null;render();});
+  const ab=document.getElementById('addtask-btn');
+  if(ab)ab.addEventListener('click',()=>{const i=document.getElementById('addtask-in'),p=document.getElementById('addtask-phase');if(i&&i.value.trim()){addTask({t:i.value,p:p?p.value:1,s:'you',pr:'Med',e:'M'},false);i.value='';render();}});
+  if(S.focusId&&!S._scrolled){S._scrolled=true;const el=document.querySelector('.focusrow');if(el)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'center'}),120);}
+}
+
+function exportCSV(){
+  const head=['Task','Description','Phase','Horizon','Owner','Effort','Priority','Resource','Depends on','Source','Status'];
+  const esc=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const lines=[head.map(esc).join(',')];
+  allTasks().forEach(t=>{const ph=PHASES[t.phase];
+    lines.push([t.title,t.desc,'Phase '+t.phase+' '+ph.label,ph.horizon,t.owner,t.eff,t.prio,t.res||'',t.dep?('Task '+t.dep):'',t.source?SRC_LABEL[t.source]:'Template',stLabels[st(t.id)]].map(esc).join(','));
+  });
+  const blob=new Blob([lines.join('\r\n')],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download='ai-discoverability-implementation-programme.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+
+render();
+</script>
+</body>
+</html>

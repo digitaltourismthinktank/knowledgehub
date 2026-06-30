@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI Discoverability · DTTT Member Platform</title>
+<meta property="og:title" content="AI Discoverability">
+<meta property="og:description" content="The research, tools and downloads DMOs need to manage AI discovery as a core channel.">
+<meta property="og:image" content="https://knowledgeprogramme.netlify.app/preview/kp-ai-discoverability-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Discoverability">
+<meta name="twitter:description" content="The research, tools and downloads DMOs need to manage AI discovery as a core channel.">
+<meta name="twitter:image" content="https://knowledgeprogramme.netlify.app/preview/kp-ai-discoverability-preview@2x.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0F2044;--navy-deep:#0A1733;--navy-mid:#1A3060;--navy-light:#E8EDF5;--navy-rule:#CBD5E8;
+  --teal:#00857C;--teal-dark:#006B63;--teal-light:#E6F3F2;--teal-text:#006B63;
+  --white:#FFFFFF;--bg:#F7F8FA;--surface:#FFFFFF;--border:#E2E6EF;
+  --text:#0F2044;--sub:#4A5568;--muted:#8A94A6;
+  --green:#1A7A4A;--green-l:#E6F4ED;
+  --amber:#925A00;--amber-l:#FEF3E2;
+  --red:#9B1C1C;--red-l:#FEF2F2;
+  --font:'Inter',-apple-system,sans-serif;
+  --font-alt:'IBM Plex Sans',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:.875rem;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+.app{display:flex;min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* SIDEBAR (canonical shell) */
+.sidebar{width:256px;min-width:256px;background:var(--navy-deep);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden;box-shadow:inset -1px 0 0 rgba(255,255,255,.07),6px 0 28px rgba(10,23,51,.22);z-index:2}
+.sb-top{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sb-logo{height:28px;width:auto;margin-bottom:15px;opacity:.96}
+.sb-org{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:4px;background:rgba(255,255,255,.05);cursor:pointer;transition:background .14s}
+.sb-org:hover{background:rgba(255,255,255,.09)}
+.sb-org-mark{width:30px;height:30px;border-radius:4px;background:linear-gradient(135deg,#27457E,#16284E);display:flex;align-items:center;justify-content:center;font-family:var(--font-alt);font-weight:700;font-size:.8125rem;color:#fff;flex-shrink:0}
+.sb-org-info{min-width:0;flex:1}
+.sb-org-name{font-family:var(--font-alt);font-size:.8125rem;font-weight:600;color:#fff;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-org-tier{display:flex;align-items:center;gap:5px;font-size:.625rem;color:rgba(255,255,255,.5);font-family:var(--font-mono);letter-spacing:.02em;margin-top:2px}
+.sb-org-tier .dot{width:5px;height:5px;border-radius:50%;background:#8FA4C8}
+.sb-nav{flex:1;overflow-y:auto;padding:10px 12px}
+.sb-nav::-webkit-scrollbar{width:0}
+.sb-back{display:flex;align-items:center;gap:8px;padding:8px 11px;margin:0 0 6px;font-size:.75rem;font-weight:500;color:rgba(255,255,255,.5);font-family:var(--font-alt);cursor:pointer;border-radius:4px;transition:all .14s;border:none;background:none;width:100%;text-align:left;text-decoration:none}
+.sb-back:hover{color:#fff;background:rgba(255,255,255,.06)}
+.sb-back svg{width:14px;height:14px;flex-shrink:0;opacity:.85}
+.sb-section{font-size:.5625rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.26);padding:14px 10px 6px;font-family:var(--font-alt)}
+.ni{display:flex;align-items:center;gap:11px;padding:8px 11px;cursor:pointer;font-size:.8125rem;font-weight:400;color:rgba(255,255,255,.55);transition:all .14s;border-radius:4px;margin-bottom:1px;border:none;background:none;width:100%;text-align:left}
+.ni:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.06)}
+.ni.on{color:#fff;background:rgba(255,255,255,.1);font-weight:500}
+.ni svg{width:17px;height:17px;flex-shrink:0;opacity:.85}
+.ni .use-dot{margin-left:auto;width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.sb-foot{padding:10px 12px 14px;border-top:1px solid rgba(255,255,255,.07)}
+.sb-user{display:flex;align-items:center;gap:10px;padding:9px 10px 9px;margin-top:6px;border-top:1px solid rgba(255,255,255,.07)}
+.sb-ava{width:30px;height:30px;border-radius:50%;background:#27457E;display:flex;align-items:center;justify-content:center;font-size:.6875rem;font-weight:600;color:#fff;font-family:var(--font-alt);flex-shrink:0}
+.sb-user-info{min-width:0;flex:1}
+.sb-user-name{font-size:.75rem;font-weight:500;color:rgba(255,255,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user-role{font-size:.625rem;color:rgba(255,255,255,.4)}
+
+/* MAIN */
+.main-col{flex:1;min-width:0;background:var(--bg)}
+.top-bar{background:var(--navy)}
+.top-bar-inner{padding:1.9rem 2.75rem 1.9rem;max-width:1180px}
+.bc{font-size:.6875rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.85rem;display:flex;align-items:center;gap:.55rem;font-family:var(--font-alt)}
+.bc .sep{color:rgba(255,255,255,.22)}
+.live-mini{display:inline-flex;align-items:center;gap:.45rem;color:#8FE3B4;margin-left:.3rem}
+.live-mini .d{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(26,122,74,.28)}
+h1.pt{font-family:var(--font-alt);font-size:1.85rem;font-weight:600;color:#fff;line-height:1.14;letter-spacing:-.02em;margin-bottom:.5rem}
+.ps{font-size:.9375rem;font-weight:300;color:rgba(255,255,255,.64);max-width:620px;line-height:1.6}
+
+/* TAB NAV */
+.tab-nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.tab-nav-inner{padding:0 2.75rem;max-width:1180px;display:flex;align-items:stretch;gap:0;overflow-x:auto}
+.tb{padding:.95rem 1.05rem;font-size:.8125rem;font-weight:400;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .14s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--font-alt);display:flex;align-items:center;gap:.5rem;user-select:none}
+.tb:hover{color:var(--text)}
+.tb.on{color:var(--navy);font-weight:600;border-bottom-color:var(--navy)}
+.tb .use-dot{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.tb.on.use{border-bottom-color:var(--teal);color:var(--teal-dark)}
+
+.page{padding:1.9rem 2.75rem 4rem;max-width:1180px;animation:up .2s ease}
+@keyframes up{from{transform:translateY(5px)}to{transform:none}}
+
+/* META BAR */
+.meta-bar{background:var(--surface);border:1px solid var(--border);border-radius:4px;display:grid;grid-template-columns:repeat(4,1fr);overflow:hidden;margin-bottom:1.75rem}
+.mc{padding:1rem 1.15rem;border-right:1px solid var(--border)}
+.mc:last-child{border-right:none}
+.mc-l{font-size:.5625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem;font-family:var(--font-alt)}
+.mc-v{font-family:var(--font-alt);font-size:.9375rem;font-weight:600;color:var(--text);line-height:1.3}
+
+/* SECTION HEADERS (read=navy, use=teal) */
+.sec-head{display:flex;align-items:center;gap:.7rem;margin-bottom:1.05rem}
+.sec-ico{width:30px;height:30px;border-radius:4px;background:var(--navy-light);color:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-ico.use{background:var(--teal-light);color:var(--teal-dark)}
+.sec-ico svg{width:16px;height:16px}
+.sec-title{font-family:var(--font-alt);font-size:1.0625rem;font-weight:600;color:var(--navy);letter-spacing:-.01em;white-space:nowrap}
+.sec-sub{font-size:.8125rem;color:var(--sub);font-weight:300;margin-left:auto;text-align:right}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:4px}
+.card-pad{padding:1.4rem 1.5rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.g2r{display:grid;grid-template-columns:1.5fr 1fr;gap:1.4rem;align-items:start}
+.mb{margin-bottom:1.4rem}
+
+.lbl{font-size:.5625rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-family:var(--font-alt)}
+.lbl.navy{color:var(--navy);opacity:.7}
+.lbl.teal{color:var(--teal-text)}
+.body3{font-size:.875rem;color:var(--sub);line-height:1.72;font-weight:300}
+.body3 p{margin-bottom:.8rem}.body3 p:last-child{margin-bottom:0}
+.body3 strong{color:var(--text);font-weight:500}
+
+/* THESIS / FINDING CARDS */
+.fc{border-radius:4px;padding:1.2rem 1.35rem;border-left:3px solid}
+.fc.key{background:var(--navy-light);border-color:var(--navy)}
+.fc.warn{background:var(--amber-l);border-color:var(--amber)}
+.fc.good{background:var(--green-l);border-color:var(--green)}
+.fc-l{font-size:.5625rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;margin-bottom:.5rem;font-family:var(--font-alt)}
+.fc.key .fc-l{color:var(--navy)}.fc.warn .fc-l{color:var(--amber)}.fc.good .fc-l{color:var(--green)}
+.fc-t{font-size:.9375rem;line-height:1.65;font-weight:400}
+.fc.key .fc-t{color:var(--navy)}.fc.warn .fc-t{color:#78420A}.fc.good .fc-t{color:#14532D}
+
+/* STAT CARDS */
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.25rem 1.3rem}
+.stat-v{font-family:var(--font-alt);font-size:1.85rem;font-weight:600;line-height:1;letter-spacing:-.02em;margin-bottom:.55rem;color:var(--navy)}
+.stat-l{font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.5}
+.stat-s{font-size:.625rem;color:var(--muted);font-family:var(--font-mono);margin-top:.6rem;letter-spacing:.01em}
+
+/* ROUTING LIST */
+.route{display:flex;align-items:center;gap:.95rem;padding:.95rem 1.1rem;cursor:pointer;border-radius:3px;transition:background .13s}
+.route:hover{background:var(--navy-light)}
+.route+.route{border-top:1px solid var(--border)}
+.route-n{font-family:var(--font-mono);font-size:.6875rem;color:var(--muted);width:20px;flex-shrink:0}
+.route-t{font-size:.875rem;font-weight:500;margin-bottom:.15rem}
+.route-d{font-size:.8125rem;color:var(--sub);font-weight:300}
+.route-ar{margin-left:auto;color:var(--muted);font-size:.85rem}
+
+/* BARS */
+.bi{display:flex;align-items:center;gap:.75rem;margin-bottom:.7rem}
+.bi:last-child{margin-bottom:0}
+.bi-name{font-size:.8125rem;color:var(--sub);font-weight:300;flex:1}
+.bi-track{flex:0 0 120px;height:5px;background:var(--navy-light);border-radius:2px;overflow:hidden}
+.bi-fill{height:100%;border-radius:2px;background:var(--navy)}
+.bi-val{font-family:var(--font-mono);font-size:.6875rem;font-weight:500;color:var(--navy);min-width:30px;text-align:right}
+
+/* EXTERNAL DATA BADGE */
+.ext-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.5625rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:.2rem .5rem;border-radius:2px;background:var(--amber-l);color:var(--amber);border:1px solid #E8C98A;font-family:var(--font-alt)}
+
+/* ACCORDION (deep dive) */
+.acc{border:1px solid var(--border);border-radius:4px;overflow:hidden;background:var(--surface)}
+.acc-item+.acc-item{border-top:1px solid var(--border)}
+.acc-row{display:grid;grid-template-columns:30px 1fr auto;gap:1rem;padding:1.15rem 1.3rem;cursor:pointer;user-select:none;transition:background .14s;align-items:start}
+.acc-row:hover{background:var(--bg)}
+.acc-item.open .acc-row{background:var(--navy-light)}
+.acc-num{width:30px;height:30px;background:var(--navy-light);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.6875rem;font-weight:500;color:var(--navy);flex-shrink:0}
+.acc-item.open .acc-num{background:var(--navy);color:#fff}
+.acc-eyebrow{font-size:.5625rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--teal-text);font-family:var(--font-alt);margin-bottom:.3rem}
+.acc-title{font-family:var(--font-alt);font-size:1rem;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:.3rem}
+.acc-arg{font-size:.875rem;color:var(--sub);font-weight:300;line-height:1.6}
+.acc-chev{color:var(--muted);transition:transform .22s;font-size:.7rem;margin-top:.5rem}
+.acc-item.open .acc-chev{transform:rotate(180deg);color:var(--navy)}
+.acc-body{display:none;padding:0 1.3rem 1.4rem 4.3rem}
+.acc-item.open .acc-body{display:block}
+
+.pos-strip{background:var(--navy);border-radius:4px;padding:1.2rem 1.4rem;color:#fff;margin:1.1rem 0}
+.pos-l{font-size:.5625rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.45;margin-bottom:.5rem;font-family:var(--font-alt)}
+.pos-t{font-size:.9375rem;font-weight:400;line-height:1.65;max-width:680px;color:rgba(255,255,255,.92)}
+.ctr-box{background:var(--red-l);border:1px solid #F5AEAD;border-radius:4px;padding:1rem 1.2rem;margin-top:1.1rem}
+.ctr-l{font-size:.5625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:.45rem;font-family:var(--font-alt)}
+.ctr-t{font-size:.8125rem;color:#7F1D1D;line-height:1.65;font-weight:300}
+
+/* BEFORE/AFTER */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin:1.1rem 0}
+.ba-l{font-size:.5625rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;margin-bottom:.5rem;font-family:var(--font-alt)}
+.ba-c{font-size:.8125rem;padding:.95rem 1.05rem;border-radius:3px;border:1px solid var(--border);line-height:1.6;color:var(--sub);font-weight:300;background:var(--bg)}
+.ba-c.after{background:var(--green-l);border-color:#A7D7B8;color:#14532D;font-weight:400}
+
+/* BEST PRACTICE */
+.bp-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.3rem 1.4rem}
+.bp-org{font-size:.5625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;font-family:var(--font-alt)}
+.bp-title{font-family:var(--font-alt);font-size:1rem;font-weight:600;line-height:1.3;margin-bottom:.55rem;color:var(--text)}
+.bp-sum{font-size:.8125rem;color:var(--sub);line-height:1.6;font-weight:300;margin-bottom:.9rem}
+.bp-pending{display:flex;align-items:center;gap:.6rem;padding:.7rem .85rem;background:var(--bg);border:1px dashed var(--navy-rule);border-radius:3px;font-size:.75rem;color:var(--muted);font-weight:400;line-height:1.45}
+.bp-pending svg{width:15px;height:15px;flex-shrink:0;color:var(--amber)}
+
+/* TOOLS (use=teal) */
+.tool{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.3rem 1.4rem;display:flex;flex-direction:column;cursor:pointer;transition:all .16s;text-decoration:none;color:inherit}
+.tool:hover{border-color:#B2D8D5;box-shadow:0 4px 14px rgba(0,133,124,.08);transform:translateY(-1px)}
+.tool.featured{grid-column:span 3;flex-direction:row;align-items:center;gap:1.5rem;background:var(--teal-light);border-color:#B2D8D5}
+.tool-top{display:flex;align-items:center;gap:.65rem;margin-bottom:.9rem}
+.tool-ico{width:34px;height:34px;border-radius:4px;background:var(--teal-light);color:var(--teal-dark);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tool-ico svg{width:18px;height:18px}
+.tool.featured .tool-ico{width:48px;height:48px;background:var(--teal);color:#fff;margin-bottom:0}
+.tool.featured .tool-ico svg{width:24px;height:24px}
+.tool-type{font-size:.5625rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-text);font-family:var(--font-alt)}
+.tool-name{font-family:var(--font-alt);font-size:1rem;font-weight:600;color:var(--text);line-height:1.25;margin-bottom:.5rem}
+.tool.featured .tool-main{flex:1}
+.tool.featured .tool-name{font-size:1.2rem;margin-bottom:.35rem}
+.tool-job{font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.55;margin-bottom:1rem}
+.tool.featured .tool-job{font-size:.875rem;margin-bottom:0;max-width:560px}
+.tool-foot{display:flex;align-items:center;gap:.65rem;margin-top:auto;flex-wrap:wrap}
+.meta-pill{font-size:.625rem;font-weight:500;color:var(--muted);font-family:var(--font-mono);white-space:nowrap}
+.meta-pill.dot::before{content:"·";margin-right:.6rem;color:var(--border)}
+.deadline-pill{font-size:.5625rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.22rem .55rem;border-radius:2px;background:var(--amber-l);color:var(--amber);border:1px solid #E8C98A;font-family:var(--font-alt)}
+.tool-arrow{margin-left:auto;color:var(--teal-dark);font-size:.85rem;opacity:.5;transition:all .16s}
+.tool:hover .tool-arrow{opacity:1;transform:translateX(2px)}
+.go{display:inline-flex;align-items:center;gap:.5rem;background:var(--teal);color:#fff;font-size:.8125rem;font-weight:600;padding:.7rem 1.25rem;border-radius:3px;font-family:var(--font-alt);white-space:nowrap;flex-shrink:0;transition:background .15s}
+.tool.featured:hover .go{background:var(--teal-dark)}
+
+/* RESOURCES */
+.res-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.2rem 1.3rem;transition:all .15s;cursor:pointer}
+.res-card:hover{border-color:var(--navy-rule);box-shadow:0 2px 10px rgba(15,32,68,.07)}
+.res-fmt{font-size:.5625rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;font-family:var(--font-alt)}
+.res-title{font-family:var(--font-alt);font-size:.9375rem;font-weight:600;margin-bottom:.4rem}
+.res-desc{font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.5;margin-bottom:.8rem}
+.res-dl{font-size:.75rem;font-weight:600;color:var(--navy);font-family:var(--font-alt);display:inline-flex;align-items:center;gap:.4rem;text-decoration:none}
+.res-dl:hover{color:var(--teal-dark)}
+.toollist{display:grid;grid-template-columns:1fr 1fr;gap:.6rem .9rem}
+.toollist-item{display:flex;align-items:baseline;gap:.6rem;font-size:.8125rem;color:var(--sub);font-weight:300;padding:.4rem 0;border-bottom:1px solid var(--border)}
+.toollist-item b{color:var(--text);font-weight:500}
+
+/* DIAGNOSTIC (use=teal) */
+.diag-wrap{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.9rem 2.1rem;max-width:720px}
+.diag-prog-row{display:flex;justify-content:space-between;margin-bottom:.45rem}
+.diag-prog-l{font-size:.6875rem;font-weight:500;color:var(--muted);font-family:var(--font-mono)}
+.diag-prog-bar{height:4px;background:var(--navy-light);border-radius:2px;overflow:hidden;margin-bottom:1.6rem}
+.diag-prog-fill{height:100%;background:linear-gradient(90deg,var(--navy),var(--teal));border-radius:2px;transition:width .4s ease}
+.diag-dim-l{font-size:.5625rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-text);margin-bottom:.65rem;font-family:var(--font-alt)}
+.diag-q{font-family:var(--font-alt);font-size:1.2rem;font-weight:600;line-height:1.35;margin-bottom:.5rem;color:var(--navy)}
+.diag-sub{font-size:.875rem;color:var(--sub);line-height:1.6;margin-bottom:1.35rem;font-weight:300}
+.diag-opts{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.45rem}
+.diag-opt{padding:.9rem 1.05rem;border-radius:3px;border:1.5px solid var(--border);cursor:pointer;transition:all .14s;display:flex;align-items:flex-start;gap:.85rem}
+.diag-opt:hover{border-color:var(--teal);background:var(--teal-light)}
+.diag-opt.sel{border-color:var(--teal);background:var(--teal-light)}
+.diag-opt-n{font-family:var(--font-mono);font-size:.6875rem;color:var(--muted);min-width:16px;padding-top:2px;font-weight:500}
+.diag-opt.sel .diag-opt-n{color:var(--teal-text);font-weight:700}
+.diag-opt-t{font-size:.875rem;font-weight:500;color:var(--text);margin-bottom:.2rem}
+.diag-opt-d{font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.45}
+.diag-nav{display:flex;align-items:center;justify-content:space-between}
+.d-btn{padding:.7rem 1.4rem;border-radius:3px;font-size:.8125rem;font-weight:600;cursor:pointer;transition:all .14s;border:none;font-family:var(--font-alt)}
+.d-btn.pri{background:var(--teal);color:#fff}
+.d-btn.pri:hover{background:var(--teal-dark)}
+.d-btn.sec{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
+.d-btn.sec:hover{border-color:var(--navy);color:var(--navy)}
+.d-btn:disabled{opacity:.35;pointer-events:none}
+.res-header{display:grid;grid-template-columns:1fr 1.3fr;gap:1.1rem;margin-bottom:1.4rem}
+.res-score{background:var(--navy);border-radius:4px;padding:1.6rem 1.8rem;color:#fff}
+.rsc-l{font-size:.5625rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.45;margin-bottom:.6rem;font-family:var(--font-alt)}
+.rsc-v{font-family:var(--font-alt);font-size:3.2rem;font-weight:600;line-height:1}
+.rsc-v .max{font-size:1rem;opacity:.4;font-weight:300}
+.rsc-name{font-family:var(--font-alt);font-size:1.15rem;font-weight:600;margin-top:.7rem;margin-bottom:.35rem}
+.rsc-d{font-size:.8125rem;opacity:.6;line-height:1.55;font-weight:300}
+.dim{margin-bottom:.95rem}.dim:last-child{margin-bottom:0}
+.dim-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.32rem}
+.dim-name{font-size:.8125rem;font-weight:400}
+.dim-score{font-family:var(--font-mono);font-size:.6875rem;font-weight:600;color:var(--navy)}
+.dim-track{height:5px;background:var(--navy-light);border-radius:2px;overflow:hidden;position:relative}
+.dim-fill{height:100%;border-radius:2px}
+.dim-bench{position:absolute;width:2px;background:var(--amber);height:100%;top:0;opacity:.85}
+.dim-note{font-size:.6875rem;color:var(--muted);margin-top:.35rem;font-weight:400}
+.gap{margin-bottom:.7rem;padding:.9rem 1.05rem;background:var(--surface);border:1px solid var(--border);border-radius:3px;display:grid;grid-template-columns:auto 1fr;gap:.85rem;align-items:start}
+.gap-pri{font-size:.5625rem;font-weight:700;padding:.22rem .6rem;border-radius:2px;white-space:nowrap;font-family:var(--font-alt);height:fit-content}
+.gap-t{font-size:.875rem;font-weight:500;margin-bottom:.25rem}
+.gap-d{font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.5}
+.rm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.rm-head{font-size:.625rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding-bottom:.6rem;border-bottom:2px solid;margin-bottom:.85rem;font-family:var(--font-alt)}
+.rm-item{background:var(--bg);border-radius:3px;padding:.75rem .85rem;margin-bottom:.55rem;border:1px solid var(--border);font-size:.8125rem;color:var(--text);font-weight:400;line-height:1.5}
+
+/* ADVISORY */
+.advisory{background:var(--teal);border-radius:4px;padding:1.9rem 2.2rem;color:#fff;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2rem;position:relative;overflow:hidden;margin-top:1.4rem}
+.advisory::after{content:"";position:absolute;right:-60px;top:-60px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.05)}
+.adv-l{position:relative;z-index:1}
+.adv-eyebrow{font-size:.5625rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.7);font-family:var(--font-alt);margin-bottom:.7rem}
+.adv-title{font-family:var(--font-alt);font-size:1.35rem;font-weight:600;line-height:1.2;margin-bottom:.6rem;max-width:520px}
+.adv-body{font-size:.9375rem;font-weight:300;color:rgba(255,255,255,.88);line-height:1.6;max-width:560px}
+.adv-r{display:flex;flex-direction:column;gap:.7rem;position:relative;z-index:1;flex-shrink:0}
+.adv-primary{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;background:#fff;color:var(--teal-dark);font-size:.875rem;font-weight:600;padding:.85rem 1.6rem;border-radius:3px;font-family:var(--font-alt);white-space:nowrap;cursor:pointer;transition:all .16s}
+.adv-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.16)}
+.adv-secondary{display:inline-flex;align-items:center;justify-content:center;font-size:.8125rem;font-weight:500;color:rgba(255,255,255,.9);padding:.6rem 1.6rem;border-radius:3px;border:1.5px solid rgba(255,255,255,.35);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:var(--font-alt)}
+.adv-secondary:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+
+.upnext{background:var(--navy);border-radius:4px;padding:1.5rem 1.7rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;margin-top:1.4rem}
+.upnext-l{font-size:.5625rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);font-family:var(--font-alt);margin-bottom:.45rem}
+.upnext-t{font-family:var(--font-alt);font-size:1.1rem;font-weight:600;color:#fff;margin-bottom:.35rem}
+.upnext-d{font-size:.8125rem;color:rgba(255,255,255,.55);line-height:1.55;max-width:520px;font-weight:300}
+.upnext-cta{font-size:.8125rem;font-weight:600;background:rgba(255,255,255,.1);color:#fff;padding:.7rem 1.3rem;border-radius:3px;font-family:var(--font-alt);white-space:nowrap;cursor:pointer;flex-shrink:0;transition:background .15s}
+.upnext-cta:hover{background:rgba(255,255,255,.18)}
+
+/* ===== REBUILD COMPONENTS ===== */
+/* OVERVIEW framing */
+.ov-lead{font-size:1.0625rem;color:var(--text);font-weight:400;line-height:1.6;max-width:720px;margin-bottom:1.05rem}
+.ov-body{font-size:.9375rem;color:var(--sub);font-weight:300;line-height:1.72;max-width:720px}
+.ov-body p{margin-bottom:.85rem}.ov-body p:last-child{margin-bottom:0}
+.ov-body strong{color:var(--text);font-weight:500}
+
+/* HERO visual */
+.hero{background:var(--navy-deep);border-radius:4px;padding:1.8rem 2rem 2rem;margin-bottom:1.6rem}
+.hero-ar{font-size:.5625rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#4FC4BB;font-family:var(--font-alt);margin-bottom:.85rem}
+.hero-h{font-family:var(--font-alt);font-size:1.55rem;font-weight:600;color:#fff;line-height:1.2;letter-spacing:-.02em;margin-bottom:1.5rem;max-width:660px}
+.hero-svg{width:100%;height:auto;display:block;max-width:880px}
+.hero-cap{font-size:.8125rem;color:rgba(255,255,255,.62);font-weight:300;line-height:1.65;margin-top:1.3rem;max-width:700px}
+
+/* KEY DATA expandable */
+.kd{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.25rem 1.35rem;cursor:pointer;transition:border-color .14s}
+.kd:hover{border-color:var(--navy-rule)}
+.kd.open{border-color:var(--navy-rule)}
+.kd-fig{font-family:var(--font-alt);font-size:2rem;font-weight:700;color:var(--navy);line-height:1;letter-spacing:-.025em;margin-bottom:.55rem}
+.kd-fig .u{font-size:1rem;font-weight:600;color:var(--teal-text);margin-left:.1rem}
+.kd-t{font-family:var(--font-alt);font-size:.9375rem;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:.4rem}
+.kd-data{font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.55}
+.kd-src{font-size:.625rem;color:var(--muted);font-family:var(--font-mono);margin-top:.55rem}
+.kd-toggle{font-size:.6875rem;font-weight:600;color:var(--teal-text);font-family:var(--font-alt);margin-top:.8rem;display:flex;align-items:center;gap:.4rem}
+.kd-toggle svg{width:13px;height:13px;transition:transform .2s}
+.kd.open .kd-toggle svg{transform:rotate(180deg)}
+.kd-more{display:none;margin-top:1.05rem;padding-top:1.05rem;border-top:1px solid var(--border)}
+.kd.open .kd-more{display:block}
+.kd-more-l{font-size:.5625rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--teal-text);font-family:var(--font-alt);margin-bottom:.45rem}
+.kd-more-t{font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.62}
+
+/* PART SUB-NAV (deep dive) */
+.psub{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1.6rem}
+.psub-btn{padding:.6rem .9rem;border-radius:4px;border:1px solid var(--border);background:var(--surface);font-size:.75rem;font-weight:500;color:var(--sub);cursor:pointer;font-family:var(--font-alt);transition:all .14s;display:flex;align-items:center;gap:.5rem}
+.psub-btn:hover{border-color:var(--navy-rule);color:var(--text)}
+.psub-btn.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.psub-btn .pn{font-family:var(--font-mono);font-size:.625rem;opacity:.55}
+.psub-btn.on .pn{opacity:.8}
+.part-head{margin-bottom:1.4rem}
+.part-eyebrow{font-size:.5625rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--teal-text);font-family:var(--font-alt);margin-bottom:.5rem}
+.part-title{font-family:var(--font-alt);font-size:1.45rem;font-weight:600;color:var(--navy);letter-spacing:-.02em;line-height:1.15;margin-bottom:.6rem}
+.part-intro{font-size:.9375rem;color:var(--sub);font-weight:300;line-height:1.65;max-width:700px}
+.part-divider{font-size:.5625rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);font-family:var(--font-alt);margin:1.7rem 0 1.1rem;padding-bottom:.55rem;border-bottom:1px solid var(--navy-rule);opacity:.9}
+
+/* DATA POINT CARD (four-step) */
+.dp{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.45rem 1.55rem;margin-bottom:1rem}
+.dp-row{display:grid;grid-template-columns:208px 1fr;gap:1.5rem;align-items:start;margin-bottom:1.15rem}
+.dp-fig-col{border-right:1px solid var(--border);padding-right:1.45rem}
+.dp-fig{font-family:var(--font-alt);font-size:2.55rem;font-weight:700;color:var(--navy);line-height:.95;letter-spacing:-.035em}
+.dp-fig .u{font-size:1.05rem;font-weight:600;color:var(--teal-text);margin-left:.12rem;letter-spacing:0}
+.dp-figcap{font-size:.6875rem;color:var(--sub);font-weight:400;line-height:1.45;margin-top:.55rem}
+.dp-bars{margin-top:1rem}
+.dp-t{font-family:var(--font-alt);font-size:1.0625rem;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:.5rem}
+.dp-data{font-size:.875rem;color:var(--sub);font-weight:300;line-height:1.6;margin-bottom:.55rem}
+.dp-src{font-size:.625rem;color:var(--muted);font-family:var(--font-mono);letter-spacing:.01em}
+.dp-impl{margin-bottom:.95rem}
+.dp-impl-l,.dp-take-l{font-size:.5625rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;font-family:var(--font-alt);margin-bottom:.42rem}
+.dp-impl-l{color:var(--muted)}
+.dp-impl-t{font-size:.875rem;color:var(--sub);font-weight:300;line-height:1.65}
+.dp-take{background:var(--teal-light);border-left:3px solid var(--teal);border-radius:0 4px 4px 0;padding:.9rem 1.15rem}
+.dp-take-l{color:var(--teal-text)}
+.dp-take-t{font-size:.875rem;color:#0E3D39;font-weight:400;line-height:1.6}
+@media(max-width:720px){.dp-row{grid-template-columns:1fr}.dp-fig-col{border-right:none;border-bottom:1px solid var(--border);padding-right:0;padding-bottom:1rem}}
+
+/* KEY ACTIONS */
+.kact{display:flex;gap:1.1rem;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.3rem 1.4rem;margin-bottom:.9rem}
+.kact-n{width:32px;height:32px;flex-shrink:0;border-radius:4px;background:var(--navy);color:#fff;font-family:var(--font-alt);font-weight:700;font-size:.9375rem;display:flex;align-items:center;justify-content:center}
+.kact-t{font-family:var(--font-alt);font-size:1.0625rem;font-weight:600;color:var(--navy);margin-bottom:.35rem}
+.kact-d{font-size:.875rem;color:var(--sub);font-weight:300;line-height:1.62}
+
+/* STRATEGY (best practice micro-strategies) */
+.strat{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1.6rem;margin-bottom:1.1rem}
+.strat-top{display:flex;align-items:baseline;gap:.85rem;margin-bottom:.75rem}
+.strat-n{font-family:var(--font-mono);font-size:.6875rem;color:var(--teal-text);font-weight:500;flex-shrink:0;padding-top:.2rem}
+.strat-name{font-family:var(--font-alt);font-size:1.2rem;font-weight:600;color:var(--navy);letter-spacing:-.01em;line-height:1.2}
+.strat-bet{font-size:.9375rem;color:var(--text);font-weight:400;line-height:1.62;margin-bottom:1.15rem}
+.strat-grid{display:grid;grid-template-columns:1.45fr 1fr;gap:1.4rem;align-items:start}
+.strat-l{font-size:.5625rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-family:var(--font-alt);margin-bottom:.65rem}
+.strat-li{display:flex;gap:.6rem;font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.55;padding:.32rem 0}
+.strat-li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--teal);margin-top:.5rem;flex-shrink:0}
+.strat-side{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:1.05rem 1.15rem}
+.strat-srow+.strat-srow{margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--border)}
+.strat-srow-l{font-size:.625rem;font-weight:600;color:var(--navy);font-family:var(--font-alt);margin-bottom:.28rem}
+.strat-srow-t{font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.5}
+.strat-ev{margin-top:1.15rem;padding-top:.95rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);font-weight:400;line-height:1.5}
+.strat-ev b{color:var(--navy);font-weight:600}
+@media(max-width:720px){.strat-grid{grid-template-columns:1fr}}
+
+.pmeta{font-size:.6875rem;color:rgba(255,255,255,.4);font-family:var(--font-mono);letter-spacing:.03em;margin-top:.75rem}
+
+
+/* INTERACTIVE HERO (ported from Claude Design) */
+.hx-stat{margin-top:18px;display:flex;align-items:baseline;flex-wrap:wrap;gap:10px;border-bottom:1px solid rgba(255,255,255,.10);padding-bottom:20px}
+.hx-stat-fig{font-family:var(--font-alt);font-weight:700;font-size:30px;line-height:1;color:#4FC4BB}
+.hx-stat-txt{font-size:15px;color:#C2CBDC;max-width:560px}
+.hx-stat-src{font-family:var(--font-mono);font-size:11px;color:#7E8BA6}
+.hx-h{font-family:var(--font-alt);font-weight:600;font-size:clamp(28px,4.4vw,44px);line-height:1.1;letter-spacing:-.02em;margin:30px 0 0;max-width:21ch;color:#fff}
+.hx-h .ac{color:#4FC4BB}
+.hx-lead{font-size:16px;line-height:1.55;color:#B7C0D4;max-width:62ch;margin:20px 0 0}
+.hx-flow{margin-top:38px}
+.hx-query{margin:0 auto;max-width:420px;text-align:center;border:1px solid rgba(255,255,255,.16);border-radius:4px;background:#0A1733;padding:12px 18px}
+.hx-query-l{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#7E8BA6}
+.hx-query-t{font-family:var(--font-alt);font-size:15px;color:#E7EBF4;margin-top:6px}
+.hx-conn{display:block;width:100%;height:54px;overflow:visible;margin:2px 0 -2px}
+.hx-conn path{fill:none;stroke:rgba(255,255,255,.18);stroke-width:1;stroke-linecap:round;vector-effect:non-scaling-stroke;transition:stroke .15s,stroke-width .15s}
+.hx-conn path.on{stroke:#4FC4BB;stroke-width:2}
+.hx-cards{margin-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.hx-card{background:#0A1733;border:1px solid rgba(255,255,255,.10);border-radius:4px;padding:18px;display:flex;flex-direction:column;outline:none;cursor:default;transition:border-color .15s,background-color .15s}
+.hx-card.on{background:rgba(79,196,187,.06);border-color:#4FC4BB}
+.hx-card:focus-visible{outline:2px solid #4FC4BB;outline-offset:2px}
+.hx-card-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.hx-card-name{font-family:var(--font-alt);font-weight:600;font-size:17px;color:#F4F6FB}
+.hx-card-idx{font-family:var(--font-mono);font-size:11px;color:#8A96AD}
+.hx-card-role{font-family:var(--font-mono);font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:#4FC4BB;margin-top:8px}
+.hx-card-fig{font-family:var(--font-alt);font-weight:700;font-size:clamp(34px,4.6vw,44px);line-height:1;color:#4FC4BB;margin-top:18px;letter-spacing:-.01em}
+.hx-card-cap{font-family:var(--font-mono);font-size:11.5px;line-height:1.45;color:#9AA7BE;margin-top:8px}
+.hx-reveal{font-size:14px;line-height:1.5;color:#C9D2E2;overflow:hidden;max-height:0;opacity:0;margin-top:0;transition:max-height .22s ease,opacity .18s ease,margin-top .22s ease}
+.hx-card.on .hx-reveal{max-height:170px;opacity:1;margin-top:12px}
+.hx-card-src{font-family:var(--font-mono);font-size:10.5px;color:#7E8BA6;margin-top:14px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08)}
+.hx-card-src span{letter-spacing:.12em}
+.hx-close{margin:34px 0 0;padding-left:16px;border-left:2px solid #4FC4BB;font-size:16px;line-height:1.5;color:#D4DBE9;max-width:56ch}
+@media (max-width:640px){.hx-cards{grid-template-columns:1fr}.hx-conn{display:none}}
+@media (prefers-reduced-motion:reduce){.hx-reveal,.hx-conn path,.hx-card{transition:none}}
+
+
+/* ===== REDESIGN v2: integrated hero, editorial framing, report deep-dive ===== */
+/* Overview editorial open */
+.ov-open{max-width:760px;margin-bottom:2rem}
+.ov-eyebrow{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-text);margin-bottom:1rem}
+.ov-title{font-family:var(--font-alt);font-weight:600;font-size:clamp(1.7rem,3.4vw,2.45rem);line-height:1.13;letter-spacing:-.02em;color:var(--navy);margin:0 0 1.05rem}
+.ov-title .tealtext{color:var(--teal-text)}
+.ov-stand{font-size:1.0625rem;line-height:1.6;color:var(--sub);font-weight:400;margin:0;max-width:680px}
+
+/* Integrated interactive figure */
+.surf{margin:0 0 1.7rem;padding:1.5rem 1.6rem 1.5rem;border:1px solid var(--border);border-radius:6px;background:var(--surface)}
+.surf-q{max-width:430px;margin:0 auto;text-align:center}
+.surf-q-l{display:block;font-family:var(--font-mono);font-size:.625rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:.35rem}
+.surf-q-t{font-family:var(--font-alt);font-size:.9375rem;color:var(--navy);font-weight:500}
+.surf-conn{display:block;width:100%;height:50px;overflow:visible;margin:.4rem 0 0}
+.surf-conn path{fill:none;stroke:var(--navy-rule);stroke-width:1.4;stroke-linecap:round;vector-effect:non-scaling-stroke;transition:stroke .15s,stroke-width .15s}
+.surf-conn path.on{stroke:var(--teal);stroke-width:2.4}
+.surf-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-top:.2rem}
+.surf-card{border:1px solid var(--border);border-radius:4px;padding:1rem 1.1rem;background:var(--bg);cursor:default;outline:none;display:flex;flex-direction:column;transition:border-color .15s,background-color .15s}
+.surf-card.on{border-color:var(--teal);background:var(--teal-light)}
+.surf-card:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.surf-card-top{display:flex;justify-content:space-between;align-items:baseline}
+.surf-card-name{font-family:var(--font-alt);font-weight:600;font-size:.9375rem;color:var(--navy)}
+.surf-card-idx{font-family:var(--font-mono);font-size:.625rem;color:var(--muted)}
+.surf-card-role{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-text);margin-top:.5rem}
+.surf-card-fig{font-family:var(--font-alt);font-weight:700;font-size:1.75rem;color:var(--navy);line-height:1;margin-top:.7rem;letter-spacing:-.02em}
+.surf-card-cap{font-size:.6875rem;color:var(--sub);line-height:1.42;margin-top:.4rem;font-weight:300}
+.surf-reveal{font-size:.75rem;line-height:1.5;color:var(--sub);overflow:hidden;max-height:0;opacity:0;margin-top:0;transition:max-height .22s ease,opacity .18s ease,margin-top .22s ease}
+.surf-card.on .surf-reveal{max-height:150px;opacity:1;margin-top:.65rem}
+.surf-card-src{font-family:var(--font-mono);font-size:.5625rem;color:var(--muted);margin-top:.7rem;padding-top:.55rem;border-top:1px solid var(--border);letter-spacing:.05em}
+.surf-foot{font-size:.75rem;color:var(--muted);margin-top:1.2rem;padding-top:.9rem;border-top:1px solid var(--border);text-align:center;font-weight:300}
+.surf-foot b{color:var(--navy);font-weight:600}
+.ov-bridge{font-size:1rem;line-height:1.55;color:var(--text);padding-left:14px;border-left:2px solid var(--teal);max-width:60ch;margin:0 0 2rem;font-weight:400}
+@media(max-width:680px){.surf-cards{grid-template-columns:1fr}.surf-conn{display:none}}
+
+/* Key data editorial framing */
+.kd-framing{max-width:740px;margin-bottom:1.7rem}
+.kd-framing-t{font-family:var(--font-alt);font-size:1.2rem;font-weight:600;color:var(--navy);line-height:1.35;letter-spacing:-.01em;margin-bottom:.8rem}
+.kd-framing-p{font-size:.9375rem;line-height:1.68;color:var(--sub);font-weight:300}
+.kd-note{font-size:.75rem;color:var(--muted);margin-top:1.5rem;font-weight:300;max-width:740px;line-height:1.55}
+
+/* Deep dive as a report */
+.report-intro{max-width:720px;margin-bottom:1.7rem}
+.report-intro-t{font-family:var(--font-alt);font-size:1.2rem;font-weight:600;color:var(--navy);line-height:1.35;margin-bottom:.7rem}
+.report-intro-p{font-size:.9375rem;line-height:1.68;color:var(--sub);font-weight:300}
+.report-contents{border:1px solid var(--border);border-radius:6px;margin-bottom:2.6rem;overflow:hidden}
+.rc-head{font-family:var(--font-mono);font-size:.5625rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:.9rem 1.3rem .4rem}
+.rc-item{display:flex;gap:1.1rem;align-items:flex-start;padding:.95rem 1.3rem;border-top:1px solid var(--border);cursor:pointer;transition:background-color .14s}
+.rc-item:hover{background:var(--bg)}
+.rc-num{font-family:var(--font-mono);font-size:.75rem;color:var(--teal-text);font-weight:500;padding-top:.15rem;width:30px;flex-shrink:0}
+.rc-t{font-family:var(--font-alt);font-size:.9375rem;font-weight:600;color:var(--navy);margin-bottom:.2rem}
+.rc-d{font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.45}
+.rc-arrow{margin-left:auto;color:var(--muted);align-self:center;flex-shrink:0}
+.rc-arrow svg{width:15px;height:15px}
+
+.rpart{margin-bottom:2.8rem;scroll-margin-top:72px}
+.rpart-num{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.1em;color:var(--teal-text);margin-bottom:.55rem}
+.rpart-title{font-family:var(--font-alt);font-size:clamp(1.4rem,2.6vw,1.75rem);font-weight:600;color:var(--navy);letter-spacing:-.02em;line-height:1.12;margin-bottom:.8rem}
+.rpart-stand{font-size:1.0625rem;line-height:1.6;color:var(--sub);font-weight:400;max-width:680px;padding-bottom:1.4rem;border-bottom:1px solid var(--navy-rule);margin-bottom:.4rem}
+.rsub{font-family:var(--font-alt);font-size:.75rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--navy);margin:1.9rem 0 1.1rem;display:flex;align-items:center;gap:.85rem}
+.rsub::after{content:"";flex:1;height:1px;background:var(--navy-rule)}
+
+.finding{display:grid;grid-template-columns:196px 1fr;gap:2rem;padding:1.7rem 0;border-bottom:1px solid var(--border);align-items:start}
+.finding-num{font-family:var(--font-alt);font-weight:700;font-size:2.7rem;color:var(--navy);line-height:.9;letter-spacing:-.04em}
+.finding-num .u{font-size:1.05rem;color:var(--teal-text);font-weight:600;margin-left:.08rem;letter-spacing:0}
+.finding-cap{font-size:.75rem;color:var(--sub);line-height:1.45;margin-top:.6rem;font-weight:300}
+.finding-bars{margin-top:.9rem}
+.finding-src{font-family:var(--font-mono);font-size:.625rem;color:var(--muted);margin-top:.85rem;letter-spacing:.03em}
+.finding-eyebrow{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.finding-t{font-family:var(--font-alt);font-size:1.2rem;font-weight:600;color:var(--text);line-height:1.28;margin-bottom:.7rem}
+.finding-data{font-size:.9375rem;color:var(--text);font-weight:400;line-height:1.6;margin:0 0 .8rem}
+.finding-impl{font-size:.9375rem;line-height:1.68;color:var(--sub);font-weight:300;margin:0 0 1rem}
+.finding-take{font-size:.9375rem;line-height:1.55;color:#0E3D39;background:var(--teal-light);border-left:3px solid var(--teal);border-radius:0 4px 4px 0;padding:.75rem 1rem}
+.finding-take b{color:var(--teal-text);font-weight:600}
+.finding.feature{background:var(--navy-light);border:none;border-radius:6px;padding:1.6rem 1.7rem;margin-bottom:.5rem}
+.finding.feature .finding-num{font-size:3.3rem}
+.finding.feature .finding-t{font-size:1.32rem}
+@media(max-width:680px){.finding{grid-template-columns:1fr;gap:1rem}}
+
+.rquote{margin:2rem 0;padding:0 0 0 1.4rem;border-left:3px solid var(--teal)}
+.rquote-t{font-family:var(--font-alt);font-size:clamp(1.2rem,2.2vw,1.45rem);font-weight:500;color:var(--navy);line-height:1.32;letter-spacing:-.01em;max-width:700px}
+.rposition{background:var(--navy);border-radius:6px;padding:1.5rem 1.7rem;margin-top:1.9rem}
+.rposition-l{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;color:#4FC4BB;margin-bottom:.7rem}
+.rposition-t{font-size:1rem;line-height:1.6;color:#E7EBF4;font-weight:400;max-width:730px}
+.rcounter{border:1px solid var(--red);background:var(--red-l);border-radius:6px;padding:1.3rem 1.5rem;margin-top:1.6rem}
+.rcounter-l{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:.55rem}
+.rcounter-t{font-size:.9375rem;line-height:1.62;color:var(--text);font-weight:400;max-width:730px}
+.ractions{margin-top:2.6rem;border-top:2px solid var(--navy);padding-top:1.7rem}
+
+.finding-num.sm{font-size:1.65rem;line-height:1.2;letter-spacing:-.01em}
+.finding.feature .finding-num.sm{font-size:2rem}
+
+/* ===== TOOLKIT HUB ===== */
+.hub-intro{max-width:730px;margin-bottom:1.6rem}
+.hub-intro-t{font-family:var(--font-alt);font-size:1.2rem;font-weight:600;color:var(--navy);line-height:1.35;margin-bottom:.7rem}
+.hub-intro-p{font-size:.9375rem;line-height:1.68;color:var(--sub);font-weight:300}
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:.5rem;margin-bottom:2.6rem}
+.flow-step{border:1px solid var(--border);border-radius:6px;padding:1rem 1.1rem;cursor:pointer;background:var(--surface);transition:border-color .14s,background-color .14s}
+.flow-step:hover{border-color:var(--navy-rule);background:var(--bg)}
+.flow-n{display:flex;align-items:center;gap:.55rem;margin-bottom:.55rem}
+.flow-num{width:23px;height:23px;border-radius:50%;background:var(--navy);color:#fff;font-family:var(--font-alt);font-weight:700;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.flow-k{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-text)}
+.flow-t{font-family:var(--font-alt);font-size:.9375rem;font-weight:600;color:var(--navy);margin-bottom:.2rem}
+.flow-d{font-size:.75rem;color:var(--sub);font-weight:300;line-height:1.42}
+.flow-arrow{color:var(--navy-rule);display:flex;align-items:center;justify-content:center}
+.flow-arrow svg{width:18px;height:18px}
+@media(max-width:760px){.flow{grid-template-columns:1fr}.flow-arrow{transform:rotate(90deg);padding:.2rem 0}}
+.stage{margin-bottom:2.7rem;scroll-margin-top:72px}
+.stage-head{display:flex;gap:1rem;align-items:flex-start;padding-bottom:1.1rem;margin-bottom:1.6rem;border-bottom:1px solid var(--navy-rule)}
+.stage-badge{width:34px;height:34px;flex-shrink:0;border-radius:6px;background:var(--navy);color:#fff;font-family:var(--font-alt);font-weight:700;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.stage-eyebrow{font-family:var(--font-mono);font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-text);margin-bottom:.35rem}
+.stage-title{font-family:var(--font-alt);font-size:1.3rem;font-weight:600;color:var(--navy);letter-spacing:-.01em;line-height:1.2;margin-bottom:.3rem}
+.stage-desc{font-size:.875rem;color:var(--sub);font-weight:300;line-height:1.5;max-width:640px}
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sb-top">
+      <svg class="sb-logo" viewBox="0 0 1079 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M238.645 242.284L121.58 210.251L183.461 78.9167L257.865 117.502L238.645 242.284Z" fill="white"></path>
+<path d="M117.063 209.085L63.4812 250L64.9372 88.6714L161.472 114.152L117.063 209.085Z" fill="white"></path>
+<path d="M163.075 109.493L65.9576 83.8672L177.927 78.9167L163.075 109.493Z" fill="white"></path>
+<path d="M120.704 0.435396L66.6854 79.6436L180.693 73.6739L200.058 23.5863L120.704 0.435396Z" fill="white"></path>
+<path d="M61.5903 79.3539L60.8623 122.307L0 85.0324L18.6373 0L96.3895 28.1015L61.5903 79.3539Z" fill="white"></path>
+<path d="M669.604 27.4062V11.7332H724.671V27.4062H706.598V115.514H687.536V27.4062H669.604Z" fill="white"></path>
+<path d="M779.653 94.1933C779.371 98.4292 778.382 102.242 776.405 105.489C772.875 111.843 765.957 116.644 754.237 116.644C747.883 116.644 742.941 115.373 739.411 113.114C732.634 109.16 729.104 102.665 728.821 94.1933V33.0542C728.963 28.9594 729.951 25.147 731.928 21.8995C735.458 15.6867 742.094 10.6036 754.237 10.6036C760.591 10.6036 765.251 12.0155 768.781 14.1335C775.558 18.2283 779.229 24.7235 779.653 33.0542V94.1933ZM754.237 25.4294C749.295 25.4294 747.883 29.383 747.883 33.0542V94.1933C747.883 98.1468 749.436 101.818 754.237 101.818C759.038 101.818 760.591 98.288 760.591 94.1933V33.0542C760.591 29.383 759.179 25.4294 754.237 25.4294Z" fill="white"></path>
+<path d="M816.497 101.818C821.298 101.818 822.851 98.288 822.851 94.1933V11.7332H841.912V94.1933C841.63 98.4292 840.642 102.242 838.665 105.489C835.135 111.843 828.216 116.644 816.497 116.644C810.143 116.644 805.201 115.373 801.671 113.114C794.893 109.16 791.363 102.665 791.081 94.1933V11.7332H810.143V94.1933C810.143 98.1468 811.696 101.818 816.497 101.818Z" fill="white"></path>
+<path d="M873.087 71.7426V115.514H854.026V11.7332H873.087C895.82 11.7332 905.563 22.0407 905.563 41.6673C905.563 51.9748 902.174 61.2939 894.973 65.2475C902.174 78.8026 903.869 98.8528 907.116 115.514H888.054C882.689 101.253 884.524 79.5086 873.087 71.7426ZM873.087 57.6228C882.971 57.6228 887.207 52.822 887.207 42.2321C887.207 31.6422 883.112 26.8414 873.087 26.8414V57.6228Z" fill="white"></path>
+<path d="M916.414 11.7332H935.476V115.514H916.414V11.7332Z" fill="white"></path>
+<path d="M972.167 24.5822C967.225 24.7234 965.671 28.8182 965.671 34.8897C965.671 38.4197 967.648 42.0909 970.472 46.0445C973.296 49.998 976.967 54.0928 980.638 58.47C985.016 63.6943 989.534 69.0599 992.782 74.2842C996.17 79.5086 998.43 84.8741 998.43 90.5221C998.43 105.63 991.511 116.644 972.025 116.644C949.151 116.644 944.35 103.795 944.35 86.4273L962.989 85.0153C962.989 92.4989 963.412 102.665 972.025 102.665C977.673 102.665 979.791 97.8644 979.791 91.2281C979.791 85.5801 973.578 78.0966 969.907 73.5782C962.706 65.3887 952.399 54.234 948.586 43.2205C947.457 40.5377 946.892 37.7137 946.892 34.8897C946.892 22.0406 955.081 10.886 971.884 10.6036C983.321 10.4624 989.958 14.2747 993.77 19.7815C997.441 25.4294 998.43 32.3482 998.43 38.1373L979.791 39.5493C979.791 33.7601 978.944 24.5822 972.167 24.5822Z" fill="white"></path>
+<path d="M1038.2 115.514C1033.96 92.3577 1029.45 69.3423 1025.35 45.9033H1024.36V115.514H1006.71V11.7332H1030.01L1041.31 59.176L1042.15 64.6827H1042.44L1043.42 59.176L1054.72 11.7332H1078.02V115.514H1060.37V45.9033H1059.24L1058.53 50.2804L1046.39 115.514H1038.2Z" fill="white"></path>
+<path d="M297.547 148.963V132.97H353.739V148.963H335.297V238.87H315.845V148.963H297.547Z" fill="white"></path>
+<path d="M392.528 192.764H377.399V238.87H357.948V132.97H377.399V176.771H392.528V132.97H411.979V238.87H392.528V192.764Z" fill="white"></path>
+<path d="M423.731 132.97H443.182V238.87H423.731V132.97Z" fill="white"></path>
+<path d="M474.175 178.788H473.022V238.87H455.3V132.97H472.59C479.362 153.142 486.278 173.025 493.05 193.197H494.202V133.115H511.924V239.015H494.634C487.863 218.843 480.947 198.96 474.175 178.788Z" fill="white"></path>
+<path d="M542.652 132.97V169.999H543.372L544.237 168.27L560.374 132.97H579.393L561.527 167.838L581.698 238.87H562.824C558.069 222.877 553.17 206.884 548.704 190.603H548.127C546.398 194.349 544.381 197.807 542.652 201.409V238.87H523.201V132.97H542.652Z" fill="white"></path>
+<path d="M600.125 149.995V134.002H656.317V149.995H637.875V239.902H618.424V149.995H600.125Z" fill="white"></path>
+<path d="M651.822 239.902L671.705 134.002H695.479L715.506 239.902H696.631L693.029 218.29H674.299L670.696 239.902H651.822ZM684.24 165.7H683.088L682.511 168.438L677.036 201.865H690.292C688.274 189.906 686.401 177.659 684.24 165.7Z" fill="white"></path>
+<path d="M740.633 179.82H739.481V239.902H721.759V134.002H739.049C745.82 154.174 752.736 174.057 759.508 194.228H760.661V134.146H778.383V240.046H761.093C754.321 219.875 747.405 199.992 740.633 179.82Z" fill="white"></path>
+<path d="M808.814 134.002V171.031H809.534L810.398 169.302L826.536 134.002H845.554L827.688 168.87L847.86 239.902H828.985C824.23 223.909 819.331 207.916 814.865 191.635H814.289C812.56 195.381 810.543 198.839 808.814 202.441V239.902H789.363V134.002H808.814Z" fill="white"></path>
+<path d="M301.515 114.869V11.0835H316.483C334.134 11.0835 343.595 13.9076 348.819 21.8151C353.761 29.7226 354.467 42.7134 354.467 63.047C354.467 83.3806 353.761 96.2302 348.819 104.138C343.595 112.045 334.134 114.869 316.483 114.869H301.515ZM320.578 99.6191C327.074 99.6191 330.745 99.0543 332.722 93.9709C333.569 91.5704 334.275 87.8991 334.416 82.9569C334.699 78.0148 334.699 71.3781 334.699 62.9058C334.699 54.4335 334.699 47.7968 334.416 42.8547C334.275 38.0537 333.569 34.3823 332.722 31.8407C330.745 26.8985 327.074 26.3337 320.578 26.3337V99.6191Z" fill="white"></path>
+<path d="M366.044 11.0842H385.107V114.87H366.044V11.0842Z" fill="white"></path>
+<path d="M422.399 24.7811C417.457 24.7811 416.045 28.7348 416.045 32.4062V94.8189C416.045 98.7726 417.599 102.444 422.399 102.444C427.2 102.444 428.754 98.9138 428.754 94.8189V76.0386H421.129V63.1889H447.816V114.87H436.52L434.12 109.928C430.589 113.458 425.506 116 419.293 116C413.221 116 408.985 114.729 405.737 112.469C399.665 108.516 396.559 102.162 396.983 93.548V32.4062C397.124 28.3112 398.112 24.4987 400.089 21.251C403.619 15.0379 410.256 9.95454 422.399 9.95454C428.754 9.95454 433.414 11.3666 436.944 13.4847C443.721 17.5796 447.393 24.0751 447.816 32.4062V48.3624H428.754V32.4062C428.754 28.7348 427.342 24.7811 422.399 24.7811Z" fill="white"></path>
+<path d="M460.29 11.1658H479.352V114.952H460.29V11.1658Z" fill="white"></path>
+<path d="M485.679 26.758V11.0842H540.749V26.758H522.675V114.87H503.612V26.758H485.679Z" fill="white"></path>
+<path d="M537.506 114.87L556.993 11.0842H580.292L599.919 114.87H581.421L577.891 93.6892H559.534L556.004 114.87H537.506ZM569.278 42.1493H568.148L567.583 44.8322L562.217 77.5918H575.208C573.231 65.8718 571.396 53.8694 569.278 42.1493Z" fill="white"></path>
+<path d="M607.541 11.0842H626.604V100.749H651.738V114.87H607.541V11.0842Z" fill="white"></path>
+</svg>
+      <div class="sb-org">
+        <div class="sb-org-mark">VS</div>
+        <div class="sb-org-info">
+          <div class="sb-org-name">Visit Skåne</div>
+          <div class="sb-org-tier"><span class="dot"></span>Evolve member</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sb-nav" id="sbnav">
+      <a class="sb-back" href="https://www.thinkdigital.travel/member-dashboard-premium/home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg>
+        Back to Knowledge Hub
+      </a>
+      <div class="sb-section">AI Discoverability</div>
+      <button class="ni on" data-sec="overview">Overview</button>
+      <button class="ni" data-sec="snapshot">Key data points</button>
+      <button class="ni" data-sec="deepdive">Deep dive</button>
+      <button class="ni" data-sec="bestpractice">Best practice</button>
+      <button class="ni" data-sec="toolkit">Toolkit<span class="use-dot"></span></button>
+    </nav>
+    <div class="sb-foot">
+      <button class="ni" data-noop>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2"></rect><path d="M2.5 9.5h19"></path><path d="M6 14.5h4"></path></svg>
+        Membership &amp; tier
+      </button>
+      <button class="ni" data-noop>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9a2.5 2.5 0 0 1 4 1.5c0 1.5-2 2-2 3"></path><path d="M12 17h.01"></path></svg>
+        Help
+      </button>
+      <div class="sb-user"><div class="sb-ava">HM</div><div class="sb-user-info"><div class="sb-user-name">Helen Magnusson</div><div class="sb-user-role">Head of Digital</div></div></div>
+    </div>
+  </aside>
+
+  <div class="main-col">
+    <div class="top-bar">
+      <div class="top-bar-inner">
+        <div class="bc">Knowledge Hub <span class="sep">›</span> AI Discoverability <span class="live-mini"><span class="d"></span>Live</span></div>
+        <h1 class="pt">AI Discoverability</h1>
+        <div class="ps">Make your destination findable, cited and recommended in AI answers, and know whether it is working.</div><div class="pmeta">Research completed May 2026 · Evolve tier and above</div>
+      </div>
+    </div>
+
+    <div class="tab-nav">
+      <div class="tab-nav-inner" id="tabnav">
+        <button class="tb on" data-sec="overview">Overview</button>
+        <button class="tb" data-sec="snapshot">Key data points</button>
+        <button class="tb" data-sec="deepdive">Deep dive</button>
+        <button class="tb" data-sec="bestpractice">Best practice</button>
+        <button class="tb use" data-sec="toolkit"><span class="use-dot"></span>Toolkit</button>
+      </div>
+    </div>
+
+    <div id="main"></div>
+  </div>
+</div>
+
+<script>
+var S={sec:'overview',part:'p1',kd:{},dd:null,diagStep:0,ans:{},diagDone:false};
+function set(p){Object.assign(S,p);render();}
+function ic(p){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';}
+var arrow='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>';
+var chev='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>';
+
+function bars(rows){return '<div class="dp-bars">'+rows.map(function(r){var pct=Math.max(4,Math.round(r[1]/r[2]*100));var teal=r[3]==='t';return '<div class="bi"><div class="bi-name">'+r[0]+'</div><div class="bi-track"><div class="bi-fill" style="width:'+pct+'%;background:'+(teal?'var(--teal)':'var(--navy)')+'"></div></div><div class="bi-val" style="color:'+(teal?'var(--teal-text)':'var(--navy)')+'">'+r[4]+'</div></div>';}).join('')+'</div>';}
+
+function dp(p){return '<div class="dp">'+
+  '<div class="dp-row"><div class="dp-fig-col"><div class="dp-fig">'+p.fig+(p.u?'<span class="u">'+p.u+'</span>':'')+'</div><div class="dp-figcap">'+p.figcap+'</div>'+(p.viz?bars(p.viz):'')+'</div>'+
+  '<div class="dp-main"><div class="dp-t">'+p.t+'</div><div class="dp-data">'+p.data+'</div><div class="dp-src">Source: '+p.src+'</div></div></div>'+
+  '<div class="dp-impl"><div class="dp-impl-l">Implications and key considerations</div><div class="dp-impl-t">'+p.impl+'</div></div>'+
+  '<div class="dp-take"><div class="dp-take-l">Strategic takeaway</div><div class="dp-take-t">'+p.take+'</div></div>'+
+'</div>';}
+
+function heroHTML(){
+ var C=[
+  {name:'Classic search',role:'Rank for the position',fig:'38%',cap:'of AI Overview sessions re-check with a second click',src:'Growth Memo',rev:'Still the foundation. It is the page a traveller opens to verify what the answer told them.'},
+  {name:'AI Overview',role:'Be cited in the summary',fig:'49%',cap:'appears on about 49 percent of queries',src:'Otterly',rev:'The synthesised answer sits above the results. Presence here is a citation, not a ranking.'},
+  {name:'AI assistant',role:'Be recommended in the answer',fig:'11%',cap:'of cited domains overlap between ChatGPT and Perplexity',src:'Aiso',rev:'Assistants answer directly, and each one draws on a different set of sources. Absence is invisible.'}
+ ];
+ var cards=C.map(function(s,i){return '<div class="surf-card'+(i===1?' on':'')+'" role="listitem" tabindex="0" data-hx="'+i+'" aria-label="'+s.name+'. '+s.role+'. '+s.fig+', '+s.cap+'. Source, '+s.src+'.">'+
+   '<div class="surf-card-top"><span class="surf-card-name">'+s.name+'</span><span class="surf-card-idx">0'+(i+1)+'</span></div>'+
+   '<div class="surf-card-role">'+s.role+'</div><div class="surf-card-fig">'+s.fig+'</div><div class="surf-card-cap">'+s.cap+'</div>'+
+   '<div class="surf-reveal">'+s.rev+'</div><div class="surf-card-src">SOURCE \u00b7 '+s.src+'</div></div>';}).join('');
+ return '<figure class="surf">'+
+   '<div class="surf-q"><span class="surf-q-l">One traveller query</span><span class="surf-q-t">\u201cWhere should we spend a quiet week this December\u201d</span></div>'+
+   '<svg class="surf-conn" viewBox="0 0 300 56" preserveAspectRatio="none" aria-hidden="true"><path data-conn="0" d="M150 1 C150 26, 50 28, 50 54"></path><path class="on" data-conn="1" d="M150 1 L150 54"></path><path data-conn="2" d="M150 1 C150 26, 250 28, 250 54"></path></svg>'+
+   '<div class="surf-cards" role="list">'+cards+'</div>'+
+   '<div class="surf-foot"><b>23.1%</b> of all trip planning now runs through AI, and it is the only channel still gaining. Source, Future Partners.</div>'+
+ '</figure>';
+}
+function rOverview(){
+ return '<div class="page">'+
+   '<div class="ov-open"><div class="ov-eyebrow">AI Discoverability \u00b7 The argument</div>'+
+   '<h1 class="ov-title">Search has split into three surfaces. You no longer compete for a position, you compete for <span class="tealtext">a slot inside the answer.</span></h1>'+
+   '<p class="ov-stand">One planning journey now runs across classic search, the AI Overview above it and the standalone assistants beside it, all at once. The basis of being found has moved from ranking for a position to being represented inside the answer. You have to be present and measured in all three.</p></div>'+
+   heroHTML()+
+   '<p class="ov-bridge">A destination can rank well and still be absent from the answer a traveller reads.</p>'+
+   '<div class="g2r"><div>'+
+     '<div class="ov-lead">For twenty years, being found meant ranking: earning a position on a page of links a traveller would scan and click. That settlement is breaking apart.</div>'+
+     '<div class="ov-body"><p>The change runs deeper than a new channel. Classic search rewarded position. The surfaces above and beside it reward <strong>representation</strong>: whether an assistant understands your destination well enough to assemble it into an answer, and whether it trusts the sources that describe you. Most of those journeys now end without a click, so the influence happens before anyone reaches your site.</p>'+
+     '<p>This is not a reason to abandon what works. Classic search still drives most discovery and feeds the AI Overview directly. It is a reason to manage a second layer deliberately, the layer that decides whether AI describes you, describes you accurately and recommends you, and to start measuring a presence that today is largely invisible in analytics.</p></div>'+
+   '</div><div>'+
+     '<div class="fc good mb"><div class="fc-l">Why this matters now</div><div class="fc-t" style="font-size:.875rem;font-weight:400">The destinations that treat AI discovery as core infrastructure now will hold an advantage that late movers find expensive to close. The work is long-term and compounding, and the channel is asymmetric in your favour.</div></div>'+
+     '<div class="card card-pad"><div class="lbl navy" style="margin-bottom:.85rem">Three reasons the opportunity is real</div>'+
+       [['AI traffic converts about five times better than organic search.'],['Non-English markets are wide open, with far thinner competition for citations.'],['Most citations are earned off your own site, so influence does not require owning every page.']].map(function(x,i){return '<div style="display:flex;gap:.7rem;padding:.6rem 0;'+(i<2?'border-bottom:1px solid var(--border)':'')+'"><div style="font-family:var(--font-mono);font-size:.75rem;color:var(--teal-text);width:18px">0'+(i+1)+'</div><div style="font-size:.8125rem;color:var(--sub);font-weight:300;line-height:1.5">'+x[0]+'</div></div>';}).join('')+
+     '</div></div></div>'+
+ '</div>';
+}
+
+var KEYDATA=[
+  {fig:'23.1',u:'%',t:'AI is now a mainstream planning channel',data:'The share of AI tools in trip planning rose from 16.8% to 23.1% in a year, the only channel gaining across all markets.',src:'Future Partners',more:'AI sits upstream of the booking decision and is the one channel still growing. For a DMO this means AI discovery is no longer experimental. It is a core channel to resource and manage now, and the foundations you lay this year shape the visibility you have when the channel matures.'},
+  {fig:'93',u:'%',t:'Most AI journeys end without a click',data:'Around 93% of Google AI Mode searches end without a click to any website, falling to 43% when an AI Overview is present.',src:'Semrush',more:'Your destination can be shaped, or missed, inside an answer that never reaches your analytics. Planning that treats the website visit as the only outcome will under-count AI influence and under-invest in it. Being well represented in the answer becomes a goal in its own right.'},
+  {fig:'5',u:'\u00d7',t:'The traffic that does arrive converts far better',data:'AI search traffic converts five times better than organic search, 14.2% against 2.8%.',src:'Superprompt',more:'AI sends fewer visitors but they arrive pre-qualified, and the effect is strongest in research-heavy journeys like booking a trip. The case for AI discovery is value per visit, not volume, which is exactly the argument to make to leadership.'},
+  {fig:'95',u:'%',t:'Your citations live mostly off your own site',data:'Around 95% of all AI citations come from third-party websites rather than a brand\u2019s own domain.',src:'Otterly',more:'Publishing more on your own pages has a ceiling. The higher-return move is facilitation: making partners, operators, listings and earned media accurate and structured, so AI cites a correct picture of your destination even where you are not the author.'},
+  {fig:'327',u:'%',t:'Non-English markets are wide open',data:'Localised sites gained 327% more AI Overview visibility for non-English queries than untranslated ones.',src:'MultiLipi',more:'Models prefer content written natively in the query language, and competition for citations outside English is far thinner. For a European DMO this is the clearest early-mover opportunity in the whole picture, provided localisation is genuine and not machine translation.'},
+  {fig:'17.75',u:'%',t:'Travel brands are barely present yet',data:'The average brand-mention rate for travel and hospitality across AI answers is just 17.75%.',src:'AthenaHQ, 2026',more:'The category as a whole is quiet in AI answers, which means share of voice is winnable rather than saturated. The destinations that baseline and build presence now will define the reference set that later models learn from.'}
+];
+function rSnapshot(){
+ return '<div class="page">'+
+   '<div class="sec-head"><span class="sec-ico">'+ic('<path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path>')+'</span><span class="sec-title">Key data points</span></div>'+
+   '<div class="kd-framing"><div class="kd-framing-t">Six figures, one conclusion. Discovery is moving into AI answers faster than most destinations can see, and the ones that act early hold the advantage.</div>'+
+   '<div class="kd-framing-p">The numbers below are the load-bearing evidence for this programme. Read together they say three things. Discovery is splitting across surfaces a DMO cannot yet measure. The traffic AI sends is small but unusually valuable. And the competition for citations is still thin, especially outside English. Open any figure for what it means for a destination building its strategy.</div></div>'+
+   '<div class="g3" style="gap:1rem">'+KEYDATA.map(function(k,i){var open=S.kd[i];return '<div class="kd'+(open?' open':'')+'" data-kd="'+i+'"><div class="kd-fig">'+k.fig+'<span class="u">'+k.u+'</span></div><div class="kd-t">'+k.t+'</div><div class="kd-data">'+k.data+'</div><div class="kd-src">Source: '+k.src+'</div><div class="kd-toggle">'+(open?'Close':'What this means for you')+' '+chev+'</div><div class="kd-more"><div class="kd-more-l">For a DMO developing strategy</div><div class="kd-more-t">'+k.more+'</div></div></div>';}).join('')+'</div>'+
+   '<div class="kd-note">These are drawn from named external studies, the evidence base for this programme. A short member pulse will add the community\u2019s own benchmarks alongside them, so treat each figure as direction rather than a target.</div>'+
+ '</div>';
+}
+
+var PARTS={
+  p1:{tag:'01',nav:'The rise of AI search',n:'01',title:'The rise of AI search',
+    intro:'Destination discovery is starting to change shape as travellers increasingly use AI to plan their trips. Five forces define the shift.',
+    points:[
+      {fig:'23.1',u:'%',figcap:'of trip planning now uses AI, up from 16.8%',t:'AI trip planning has gone mainstream',data:'The share of AI tools in trip planning rose from 16.8% in 2025 to 23.1% in 2026, the only channel gaining momentum across all markets.',src:'Future Partners',viz:[['2025',16.8,30,'','16.8%'],['2026',23.1,30,'t','23.1%']],impl:'AI is gradually becoming a primary planning channel, sitting upstream of the booking decision. As the way visitors plan their holidays changes, strategies should adjust accordingly, without overhyping the role AI plays in the process.',take:'Treat AI discovery as a core channel to start managing now, and put the technical and strategic foundations in place to strengthen your destination\u2019s presence in this new channel.'},
+      {fig:'34.5',u:'%',figcap:'of ChatGPT queries search the live web',t:'AI search is selective',data:'ChatGPT searches the internet for only about 34.5% of queries, drawing most answers from its training data.',src:'Semrush',impl:'Much of what AI says about a destination comes from what it absorbed in training, so visibility is partly decided long before any query is typed.',take:'Changing how AI perceives your destination is a long-term process with no instant fix. Understand how you are currently perceived, identifying strengths, weaknesses, opportunities and threats, and build a content and partnership strategy that can gradually be incorporated into future AI models.'},
+      {fig:'93',u:'%',figcap:'of AI Mode searches end without a click',t:'Search is becoming zero-click',data:'Around 93% of Google AI Mode searches end without a click to any website. When an AI Overview is present, the corresponding zero-click rate is 43%.',src:'Semrush',impl:'Visibility is increasingly decided by an AI-generated response, before any visit to a site. This means a destination can shape a traveller\u2019s view without the impact appearing in current analytics.',take:'Stop treating the click as the only outcome that counts. Being well represented in AI answers should be an equally important goal.'},
+      {fig:'38',u:'%',figcap:'of AI Overview sessions re-check with a second click',t:'Search behaviour is changing, not dying',data:'38% of AI Overview sessions involve reassurance-seeking clicks, where users open a second link just to be sure. This validation increasingly happens on the results page itself.',src:'Growth Memo',impl:'The "SEO is dead" narrative is wrong. Users now read, compare and re-check AI Overview answers. On AI Mode, however, users tend to accept the AI shortlist. Google\u2019s own guidance confirms SEO remains foundational to Generative Engine Optimisation.',take:'Earn reassurance. Protect and build the SEO foundation while adding AI visibility on top. Destinations need to look authoritative at the moment of comparison.'},
+      {fig:'5',u:'\u00d7',figcap:'higher conversion from AI search traffic',t:'The traffic that arrives converts better',data:'AI search traffic has a five times higher conversion rate, 14.2% against 2.8%.',src:'Superprompt',viz:[['Organic',2.8,15,'','2.8%'],['AI search',14.2,15,'t','14.2%']],impl:'AI sends fewer visitors, but they arrive pre-qualified. The effect is strongest in research-heavy, consideration-led journeys, much like the process of booking a trip.',take:'The traditional focus on clicks and impressions is gradually becoming outdated. Evaluating AI discovery should focus on long-term value creation instead.'}
+    ],
+    pos:'Treat AI discovery as a core channel to manage now. It sits upstream of booking, it is the only channel still gaining share, and the traffic it sends converts far better. The work is long-term and compounding, so the foundations laid now decide the visibility you have later.'},
+  p2:{tag:'02',nav:'The two pathways',n:'02',title:'The two pathways',
+    intro:'AI search is not a singular process. It consists of two different types of engagement. The shift underneath them is the same: from ranking, competing for a position on a page, to representation, competing for a slot inside a synthesised answer.',
+    points:[
+      {fig:'38',u:'%',figcap:'of cited pages still rank in the top 10, down from 76% a year ago',t:'Pathway one. AI Overviews, the AI inside the search engine',data:'Only about 38% of the pages AI Overviews cite still rank in the top 10 for the query, down from roughly 76% a year earlier. Overviews now appear on about 49% of queries and prefer third-party sources, and AI Mode produces 12 times higher citations.',src:'Otterly',viz:[['A year ago',76,100,'','76%'],['Now',38,100,'t','38%']],impl:'This is the decoupling of AI Overviews from traditional rankings, and many cited pages do not rank on page one at all (Ahrefs). Google is steering attention through new Preferred Sources, selected by individual users, and Highly Cited labels.',take:'Treat SEO as an entry point and invest in third-party authority, because for this pathway being talked about elsewhere matters as much as your own pages. Cover the whole topic and its adjacent questions rather than chasing a single head-term ranking.'},
+      {fig:'11',u:'%',figcap:'domain overlap between ChatGPT and Perplexity',t:'Pathway two. LLM interfaces, the standalone assistants',data:'Single-platform strategies fail. Only around 11% of cited domains overlap between ChatGPT and Perplexity.',src:'Aiso',impl:'ChatGPT, Claude, Perplexity and Gemini each draw on different sources and lean on earned and community content. Here, a mention with no link can matter as much as a citation.',take:'Do not optimise for one assistant. Build broad authority and presence across the platforms these models read.'},
+      {fig:'1 in 100',figcap:'chance the same brands appear twice',t:'The shared property. AI does not rank, and it does not repeat',data:'Asked the same prompt 100 times, ChatGPT and Google return the same list of brands less than once in 100, and the same order closer to once in 1,000.',src:'SparkToro',impl:'AI is a probability engine, and the fan-out process splits one question into hidden sub-queries. There is no stable position to rank for, and identical questions yield different answers.',take:'Measure presence across many runs, not position in any single one.'}
+    ],
+    pos:'Manage both pathways on purpose. Keep your classic search foundations strong for AI Overviews, and separately build the clarity and citability that standalone assistants reward. They are complementary investments, not competing ones, and there is no single channel to win.'},
+  p3:{tag:'03',nav:'Maximising performance',n:'03',title:'Maximising performance',
+    intro:'From a technical and a strategic perspective, this part sets out the key considerations, each with the evidence behind it.',
+    tech:[
+      {fig:'22,000',figcap:'pages Anthropic crawls per visitor referred',t:'Let the right crawlers in, and know what they cost',data:'Google crawls roughly 5 pages for every visitor it refers, while Microsoft (34), Perplexity (126), OpenAI (786) and Anthropic (22,000) crawl far more per referral. Only about 10% of AI crawler requests are for search, around 60% for training.',src:'Cloudflare Radar',impl:'Allowing AI crawlers to access your site has implications for server capacity, with AI bots scraping in bursts. Yet blunt blocking has a cost: publishers who blocked AI bots lost 23% of their traffic, including a 14% decline in human visitors (Hacks / Hackers).',take:'Allow GPTBot, OAI-SearchBot, Googlebot, Anthropic-AI, PerplexityBot and CCBot, and separate training crawlers from search crawlers in robots.txt rather than blocking wholesale.'},
+      {fig:'34',u:'%',figcap:'of ChatGPT and Claude fetches hit 404 pages',t:'Support the crawl, do not just permit it',data:'Most AI crawlers do not run JavaScript, and the ChatGPT and Claude crawlers spend over 34% of fetches hitting 404 pages, against Google\u2019s 8%.',src:'Vercel',impl:'A site can rank in Google, whose crawler renders JavaScript, while being a blank page to ChatGPT and Claude, which read only the raw HTML. The crawl is also inefficient and wastes server effort on dead URLs.',take:'Serve critical content in the initial HTML through server-side rendering, keep sitemaps and redirects clean, and test by disabling JavaScript rather than trusting Google\u2019s tools.'},
+      {fig:'+37',u:'%',figcap:'AI visibility lift from adding statistics',t:'Earn citations through substance and structure',data:'Adding expert quotations lifts AI visibility by 22% and statistics by 37% (Aggarwal et al.). Content structure optimisations including information chunking are a separate, independent lever worth a further 17.3% in citation rate (Yu et al.).',src:'Aggarwal et al.; Yu et al.',impl:'Evidence-rich, quotable and well-structured content is key to being cited, and freshness matters too, with the majority of AI bot traffic targeting recent content.',take:'Front-load answers, write self-contained chunks of 50 to 150 words, use clear headings and emphasis, and lead with the destination\u2019s own data and named, first-hand expertise.'},
+      {fig:'3',u:'\u00d7',figcap:'more likely to be cited with JSON-LD',t:'The schema debate',data:'AI-cited pages are about three times more likely to carry JSON-LD than non-cited pages (Ahrefs), and some controlled tests report retrieval-accuracy gains of around 30% when structured data is added (AISO). However, another controlled study of a live-retrieval test found AI systems read only the visible HTML and ignored JSON-LD (searchVIU).',src:'Ahrefs; AISO; searchVIU',impl:'While the evidence cuts both ways, adding JSON-LD schema is a strong signal that AI systems will be more likely to access this content.',take:'Use schema for foundational reasons and ensure it is added to pages that are not yet being discovered. Do not rely upon it to unlock citations, and ensure that content can still be accessed through plain HTML.'},
+      {fig:'327',u:'%',figcap:'more AI Overview visibility for localised sites',t:'Multilingual GEO is a European opportunity',data:'A study of 1.3 million AI citations found localised sites gained 327% more AI Overview visibility for non-English queries than untranslated ones, because models prefer to cite content written natively in the query language.',src:'MultiLipi',impl:'An English-led playbook does not transfer cleanly, and translation alone is not localisation. Crucially, competition for AI citations in non-English markets is far thinner than in English.',take:'Localise properly, with consistent terminology per language, and treat non-English markets as an early-mover opportunity rather than an afterthought.'}
+    ],
+    strat:[
+      {fig:'40',u:'%',figcap:'of environmental claims lacked supporting evidence',t:'Run regular content audits',data:'The EU\u2019s Empowering Consumers for the Green Transition Directive is enforceable from 27 September 2026, and the European Commission found over half of environmental claims it assessed were vague and 40% lacked supporting evidence.',src:'Lewis Silkin',impl:'AI reads and repeats what is published, so an out-of-date or unsubstantiated claim teaches the model something false and, on sustainability, now risks non-compliance. Creating new content is essential, but reviewing existing content for accuracy is the neglected other half of improving how a destination is described.',take:'Build a repeatable audit: inventory all content and listings, assess each page for net information gain (keep, upgrade, consolidate or remove), verify accuracy including sustainability claims, restructure content for AI legibility, then re-publish and schedule the next review.'},
+      {fig:'84',u:'%',figcap:'of AI citations come from earned media',t:'Lead with experience and story',data:'84% of AI citations come from earned media, showing the value of powerful storytelling.',src:'Muck Rack',impl:'Google\u2019s quality framework, Experience, Expertise, Authoritativeness and Trust, rewards first-hand, original perspectives, and AI trusts and cites the same profile. Generic, keyword-led content such as the "hidden gems" formulation adds limited information gain, and mass-produced AI content shows a boom-bust pattern.',take:'Tell genuine stories with authentic local voices, and ensure detailed editorial content shows the diversity of your destination for each of your target audiences.'},
+      {fig:'0 to 50',u:'%',figcap:'range across which AI could read live pricing',t:'Make practical information machine-readable on listings',data:'Testing whether five AI systems could read pricing data, success ranged from 50% for Gemini down to 37.5% for ChatGPT, 25% for Google AI Mode, 12.5% for Perplexity and 0% for Claude.',src:'searchVIU',impl:'Practical details such as nearest station, opening hours, accessibility and recognised certifications are exactly what AI pulls for travel queries, but because live retrieval reads visible HTML, they must sit in clear on-page text and not be hidden in metadata.',take:'Add specific practical fields to the listings DMOs already host, as clean, labelled, well-structured visible text that serves both a human and a crawler, with matching schema on top.'},
+      {fig:'95',u:'%',figcap:'of AI citations come from third-party sites',t:'Facilitator or creator?',data:'Around 95% of all AI citations come from third-party websites rather than a brand\u2019s own domain.',src:'Otterly',impl:'AI cites external sources more often than the DMO\u2019s own website. However, much of this third-party content is still influenceable, even when it is not owned.',take:'Shift effort toward facilitation, seeding accurate, well-structured information across the platforms AI reads most frequently, not only publishing content on your own pages.'},
+      {fig:'2.8',u:'\u00d7',figcap:'more likely to appear with four or more platforms',t:'Niche, mainstream, creators or traditional?',data:'Brands present across four or more platforms are 2.8 times more likely to appear in ChatGPT responses, so breadth of credible presence matters more than dominance on any single one.',src:'The Digital Bloom',impl:'There is no single winning channel, because AI assembles each answer from a spread of sources. The decision is how to weight a mix of niche and mainstream publishers, traditional media and influencers. Engaged niche and specialist publishers bring depth and trust, mainstream outlets have longstanding authority, and creators showcase powerful experiential content.',take:'Build presence across a broad, credible mix rather than betting on a single platform.'},
+      {fig:'25.9',u:'%',figcap:'of ChatGPT visits to French news after the Le Monde deal',t:'The contractual question',data:'After Le Monde\u2019s partnership with OpenAI, the publisher captured 25.9% of all ChatGPT-driven visits to French news sites, more than ten times its closest competitor.',src:'La Revue des M\u00e9dias',impl:'Direct agreements with AI companies already shape who gets surfaced, while regulators have given publishers the ability to opt out of AI features. This is an additional consideration that needs to be part of the strategic thinking around the partners to invite and the contractual agreements made.',take:'When organising press trips, keep licensing choices out in the open to ensure there are synergies that enable AI to cite the content that is produced.'}
+    ],
+    pos:'Get the foundations right before anything clever, then shift from creator to facilitator. A site AI cannot crawl, render or extract clean facts from will not be cited, however good the content. And since around 95% of citations sit on third-party sites, the highest return is in making the wider ecosystem legible, not only your own pages.'},
+  p4:{tag:'04',nav:'Measuring AI visibility',n:'04',title:'Measuring AI visibility',
+    intro:'Measurement is where most destinations currently feel least certain, as the attribution pathways are still in the early stages of development. DMOs must accept that some influence will never show up in the numbers at all.',
+    points:[
+      {fig:'17.75',u:'%',figcap:'average brand-mention rate for travel in AI answers',t:'Share of voice',data:'The average brand mention rate for travel and hospitality across AI answers is just 17.75%.',src:'AthenaHQ, State of AI Search 2026',impl:'Share of voice, a brand\u2019s share of presence, prominence and sentiment in AI outputs, is the natural successor to share of search. Here it is important to track the percentage of brand mentions against competitors in response to key prompts.',take:'Adopt share of model as the headline KPI, and track citations, mentions and AI referrals rather than rankings.'},
+      {fig:'1 in 1,000',figcap:'chance two answers share the same order',t:'Establish a baseline by reverse prompt engineering',data:'AI responses are highly variable, with only a 1 in 100 likelihood of seeing the same brands in a response, dropping to a 1 in 1,000 probability that two lists of results will be in the same order.',src:'SparkToro',impl:'As AI answers are non-deterministic, a baseline must be built from a fixed set of representative traveller prompts, run repeatedly, then re-run regularly to see whether improvements in share of voice can be seen. To track performance cleanly, use an account with memory turned off, ideally not linked to your work account, as this can introduce bias.',take:'Define a prompt set, create a baseline and monitor over time, while accepting that growing your share of AI search takes time. Model updates will shift results outside your control, so treat major shifts with caution as they may simply reflect algorithmic change.'},
+      {fig:'85',u:'%',figcap:'of pages ChatGPT retrieves are never cited',t:'Account for Dark AI',data:'Around 85% of the pages ChatGPT retrieves never appear in its final response.',src:'AirOps',impl:'AI can read a destination\u2019s content and shape a traveller\u2019s decision without ever citing it, so a high proportion of AI influence remains invisible in citation and referral data.',take:'Use online destination sentiment as a proxy and include AI recommendations as a new option on visitor surveys. There is also a need to accept that some of the channel\u2019s value is unmeasurable.'},
+      {fig:'£0',figcap:'to start, with native reports from Bing and Google',t:'Native tools for the basics, third-party for the detail',data:'Microsoft\u2019s Bing AI Performance report launched in February 2026, and Google introduced Search Generative AI performance reports in Search Console in June. For cross-engine share of voice, sentiment and competitor benchmarking you need a dedicated third-party platform such as Profound, AthenaHQ, Otterly, Scrunch, Peec or Ahrefs Brand Radar.',src:'Microsoft; Google',impl:'The platforms\u2019 own tools give you the basics, free and based on real activity, but each covers only its own channel. Native tools report your real footprint, whereas third-party tools mostly run simulated prompts, so the two are complementary rather than interchangeable.',take:'Start with the free native reports to establish an initial baseline, then add one third-party platform for cross-platform sentiment and share-of-voice detail after comparing the pricing, methodology and capabilities of each.'},
+      {fig:'3',u:' yrs',figcap:'of data media mix modelling needs',t:'Connect visibility to value',data:'Media Mix Modelling, which estimates how much each channel contributes by reading patterns in results over time, can in principle value AI as a channel, but it needs around three years of data.',src:'Impression',impl:'A DMO does not need perfect attribution to estimate value. Return on investment can be calculated gradually, matching long-term AI visibility against performance metrics.',take:'Segment AI referral traffic and see which pages it lands on, and track branded search as the clearest early proxy, since appearing in AI answers tends to lift brand-name searches a few weeks later. Each quarter, set AI visibility beside your outcomes; media mix modelling becomes the advanced step once the historical data exists.'}
+    ],
+    counter:'The "SEO is dead" framing is wrong. Classic search still drives the majority of discovery and feeds AI Overviews directly, and Google\u2019s own guidance confirms SEO remains foundational. The honest position is additive: AI search is a new layer to manage and measure on top of solid search foundations, not a replacement for them.',
+    pos:'Adopt share of model as the headline measure, baseline it by reverse prompt engineering, and track citations, mentions and sentiment rather than rankings. Treat large swings with caution, as they may simply reflect a model update, and accept that part of this channel\u2019s value is, for now, unmeasurable.'},
+  actions:{tag:'KA',nav:'Key actions',n:'',title:'The pathway forward',intro:'Three actions turn the research into a programme. They are sequenced: get legible, then decide where to create and facilitate, then measure what matters.',
+    acts:[['Get the foundation right','Audit AI crawler access and allow the major AI crawlers, serve critical content in visible server-rendered HTML, and earn citations through substance and structure.'],['Decide where you create, verify and facilitate','Run a regular content-audit process covering net information gain and accuracy, add machine-readable practical information to listings, lead with story over keywords, and make the deliberate calls on paid-media partners and the diversification of your content ecosystem.'],['Measure what matters, and accept what you cannot','Adopt share of voice, baseline it by reverse prompt engineering, track citations, mentions and sentiment rather than rankings, and accept that model updates move results outside your control.']]}
+};
+
+function fnd(p,idx,feature){
+ var sm=/\s/.test(p.fig)?' sm':'';
+ return '<div class="finding'+(feature?' feature':'')+'">'+
+  '<div class="finding-fig"><div class="finding-num'+sm+'">'+p.fig+(p.u?'<span class="u">'+p.u+'</span>':'')+'</div><div class="finding-cap">'+p.figcap+'</div>'+(p.viz?bars(p.viz):'')+'<div class="finding-src">Source \u00b7 '+p.src+'</div></div>'+
+  '<div class="finding-body"><div class="finding-eyebrow">'+idx+'</div><div class="finding-t">'+p.t+'</div><p class="finding-data">'+p.data+'</p><p class="finding-impl">'+p.impl+'</p><div class="finding-take"><b>Strategic takeaway.</b> '+p.take+'</div></div>'+
+ '</div>';
+}
+var PARTMETA={
+ p1:{desc:'Five forces moving discovery upstream of the booking decision.',quote:'AI sits upstream of booking, it is the only channel still gaining share, and the traffic it sends converts five times better.'},
+ p2:{desc:'Two pathways, one shift: from ranking to representation.',quote:'There is no stable position to rank for. Identical questions return different answers, so presence is measured across many runs, not one.'},
+ p3:{desc:'The technical foundations and the strategic choices that earn citations.',quote:'A site AI cannot crawl, render or extract clean facts from will not be cited, however good the content.'},
+ p4:{desc:'Measuring a channel that is non-deterministic and largely invisible.',quote:'Adopt share of model as the headline measure, and accept that part of this channel\u2019s value is, for now, unmeasurable.'},
+ actions:{desc:'Three actions that turn the research into a managed programme.'}
+};
+function rDeepDive(){
+ var order=['p1','p2','p3','p4'];
+ var contents='<div class="report-contents"><div class="rc-head">Contents</div>'+order.map(function(k){var P=PARTS[k];return '<div class="rc-item" data-jump="'+k+'"><div class="rc-num">'+P.tag+'</div><div><div class="rc-t">'+P.title+'</div><div class="rc-d">'+PARTMETA[k].desc+'</div></div><span class="rc-arrow">'+arrow+'</span></div>';}).join('')+
+   '<div class="rc-item" data-jump="actions"><div class="rc-num">KA</div><div><div class="rc-t">Key actions</div><div class="rc-d">'+PARTMETA.actions.desc+'</div></div><span class="rc-arrow">'+arrow+'</span></div></div>';
+ var body=order.map(function(k){var P=PARTS[k];
+   var s='<div class="rpart" id="part-'+k+'"><div class="rpart-num">Part '+P.n+'</div><div class="rpart-title">'+P.title+'</div><div class="rpart-stand">'+P.intro+'</div>';
+   if(k==='p3'){
+     s+='<div class="rsub">The technical foundations</div>';
+     P.tech.forEach(function(p,i){s+=fnd(p,'Finding 0'+(i+1),i===0);});
+     s+='<div class="rquote"><div class="rquote-t">'+PARTMETA.p3.quote+'</div></div>';
+     s+='<div class="rsub">The strategic decisions</div>';
+     P.strat.forEach(function(p,i){s+=fnd(p,'Finding 0'+(i+1),false);});
+   } else {
+     P.points.forEach(function(p,i){s+=fnd(p,'Finding 0'+(i+1),i===0);if(i===1&&PARTMETA[k].quote){s+='<div class="rquote"><div class="rquote-t">'+PARTMETA[k].quote+'</div></div>';}});
+   }
+   if(P.counter)s+='<div class="rcounter"><div class="rcounter-l">The narrative worth resisting</div><div class="rcounter-t">'+P.counter+'</div></div>';
+   if(P.pos)s+='<div class="rposition"><div class="rposition-l">DTTT position</div><div class="rposition-t">'+P.pos+'</div></div>';
+   return s+'</div>';
+ }).join('');
+ var A=PARTS.actions;
+ var acts='<div class="ractions" id="part-actions"><div class="rpart-num">The pathway forward</div><div class="rpart-title">'+A.title+'</div><div class="rpart-stand" style="border-bottom:none;padding-bottom:.5rem;margin-bottom:1.1rem">'+A.intro+'</div>'+A.acts.map(function(a,i){return '<div class="kact"><div class="kact-n">'+(i+1)+'</div><div><div class="kact-t">'+a[0]+'</div><div class="kact-d">'+a[1]+'</div></div></div>';}).join('')+'</div>';
+ return '<div class="page"><div class="report-intro"><div class="report-intro-t">The research, in full</div><div class="report-intro-p">Across four parts this research follows one shift: destination discovery is moving into AI answers, and the basis of being found is moving with it. Part one shows the shift is real and gaining. Part two explains the two pathways it travels. Part three sets out how to perform in both. Part four is how to measure a channel that resists measurement. Each finding leads with the evidence, then what it means, then the move it implies.</div></div>'+contents+body+acts+'</div>';
+}
+
+var STRATEGIES=[
+  {name:'Lead as the facilitator, not the author',bet:'Most of what AI cites about your destination sits on sites you do not own, so the highest-return move is to make the wider ecosystem accurate and legible, rather than only publishing more on your own pages.',involves:['Run a partner-data quality programme so operators, attractions and events publish clean, structured, factual listings.','Invest in earned media and authentic local storytelling, the profile AI trusts and cites most.','Treat press trips and creator work as citation-building, with licensing agreed openly so the content can be surfaced.','Keep your own pages as the canonical reference the ecosystem points back to.'],fits:'DMOs with strong industry relationships and a credible brand, but limited authority on their own domain.',tradeoff:'Less direct control and slower to show, because it depends on influencing third parties rather than shipping pages.',ev:'Around <b>95%</b> of AI citations come from third-party sites, and <b>84%</b> from earned media (Otterly; Muck Rack).'},
+  {name:'Win on technical legibility first',bet:'Many destinations are invisible to assistants for purely technical reasons, not editorial ones. Fix legibility before content, because a page AI cannot crawl, render or parse will never be cited, however good it is.',involves:['Audit crawler access and allow the major AI crawlers, separating training from search in robots.txt.','Serve critical content in server-rendered HTML and test with JavaScript disabled.','Clean sitemaps and redirects so crawlers stop wasting a third of fetches on dead URLs.','Put practical fields, hours, prices, access and transport, in clear visible text with matching schema.'],fits:'DMOs with a capable development resource and a content base that is good but not machine-legible.',tradeoff:'Unglamorous and invisible to leadership, and necessary but not sufficient on its own.',ev:'AI crawlers waste over <b>34%</b> of fetches on 404s and mostly do not run JavaScript (Vercel).'},
+  {name:'Compete where the field is thin',bet:'Competition for AI citations in non-English markets is far lighter than in English, and models prefer content written natively in the query language. A European DMO can take a citation lead in its priority source markets by localising properly.',involves:['Identify the non-English source markets that matter most and localise content natively, not by translation alone.','Keep terminology consistent per language across pages and listings.','Localise the practical and structured data, not only the inspiration copy.','Test a prompt set per market to see where you appear and where rivals do not.'],fits:'DMOs with defined non-English source markets and the capacity, in-house or partnered, to localise well.',tradeoff:'Real resource per language, and it needs native expertise rather than machine translation.',ev:'Localised sites gained <b>327%</b> more AI Overview visibility for non-English queries (MultiLipi).'},
+  {name:'Manage by evidence, build the case as you go',bet:'The channel is non-deterministic and largely invisible, so the destinations that pull ahead are the ones that measure it. A disciplined baseline turns a vague anxiety into a managed programme and builds the internal case for investment.',involves:['Define a fixed prompt set of real traveller questions and run it across the main assistants.','Baseline your share of model, then re-run quarterly, with memory off to avoid bias.','Track branded search as the clearest early proxy for AI influence.','Start with the free native reports, then add one third-party tool for cross-engine detail.'],fits:'DMOs that need to justify investment to leadership and want to move deliberately rather than chase noise.',tradeoff:'Slow to show return, demands analytical discipline, and you must accept that part of the value is unmeasurable.',ev:'Identical prompts return the same brands less than <b>once in 100</b>, so single readings are noise (SparkToro).'}
+];
+function rBestPractice(){
+  return '<div class="page">'+
+    '<div class="sec-head"><span class="sec-ico">'+ic('<circle cx="12" cy="12" r="9"></circle><path d="m9 12 2 2 4-4"></path>')+'</span><span class="sec-title">Best practice</span><span class="sec-sub">Four strategic approaches to the same goal. Most destinations blend them, led by one.</span></div>'+
+    '<div class="fc key mb"><div class="fc-l">How to use this</div><div class="fc-t" style="font-size:.875rem;font-weight:400">There is no single right way to build AI visibility, and we are deliberately not prescribing named case studies. These are four coherent strategies, each suited to a different starting position. Read them as routes to choose between and combine, not a checklist to complete.</div></div>'+
+    STRATEGIES.map(function(s,i){return '<div class="strat"><div class="strat-top"><span class="strat-n">0'+(i+1)+'</span><span class="strat-name">'+s.name+'</span></div>'+
+      '<div class="strat-bet">'+s.bet+'</div>'+
+      '<div class="strat-grid"><div><div class="strat-l">What it involves</div>'+s.involves.map(function(x){return '<div class="strat-li">'+x+'</div>';}).join('')+'</div>'+
+      '<div class="strat-side"><div class="strat-srow"><div class="strat-srow-l">When it fits</div><div class="strat-srow-t">'+s.fits+'</div></div><div class="strat-srow"><div class="strat-srow-l">The trade-off</div><div class="strat-srow-t">'+s.tradeoff+'</div></div></div></div>'+
+      '<div class="strat-ev">'+s.ev+'</div></div>';}).join('')+
+  '</div>';
+}
+
+function stageHead(n,key,title,desc){return '<div class="stage-head"><div class="stage-badge">'+n+'</div><div><div class="stage-eyebrow">Stage '+n+' \u00b7 '+key+'</div><div class="stage-title">'+title+'</div><div class="stage-desc">'+desc+'</div></div></div>';}
+function rToolkit(){
+ var steps=[['1','Assess','Readiness diagnostic','See where you stand against peers.'],['2','Act','Interactive tools','Decide what to do, and start doing it.'],['3','Equip','Toolkit and downloads','Take it to your team and partners.']];
+ var ids=['assess','act','equip'];
+ var flow='<div class="flow">'+steps.map(function(s,i){return '<div class="flow-step" data-stage="'+ids[i]+'"><div class="flow-n"><div class="flow-num">'+s[0]+'</div><div class="flow-k">'+s[1]+'</div></div><div class="flow-t">'+s[2]+'</div><div class="flow-d">'+s[3]+'</div></div>'+(i<2?'<div class="flow-arrow">'+arrow+'</div>':'');}).join('')+'</div>';
+ var tools='<div class="g3" style="gap:1rem">'+
+   '<a class="tool" href="/tools/content-geo-strategy-advisor.html"><div class="tool-top"><span class="tool-ico">'+ic('<path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path>')+'</span><span class="tool-type">Advisor</span></div><div class="tool-name">Content and GEO strategy advisor</div><div class="tool-job">Answer six questions about your destination and get a prescriptive content blueprint, prioritised for AI visibility and mapped to this research.</div><div class="tool-foot"><span class="meta-pill">6 questions</span><span class="tool-arrow">&#8594;</span></div></a>'+
+   '<a class="tool" href="/tools/tactics-ethics-checker.html"><div class="tool-top"><span class="tool-ico">'+ic('<circle cx="12" cy="12" r="9"></circle><path d="m9 12 2 2 4-4"></path>')+'</span><span class="tool-type">Checker</span></div><div class="tool-name">Tactics and ethics checker</div><div class="tool-job">Look up any GEO, AEO or SEO tactic for a plain verdict on whether it is sound, and where the ethical line sits.</div><div class="tool-foot"><span class="meta-pill">31 tactics</span><span class="tool-arrow">&#8594;</span></div></a>'+
+   '<a class="tool" href="/tools/implementation-programme.html"><div class="tool-top"><span class="tool-ico">'+ic('<rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 10h18M9 4v16"></path>')+'</span><span class="tool-type">Programme</span></div><div class="tool-name">Implementation programme</div><div class="tool-job">Turn the research into a managed backlog across three phases, with owners, effort and progress tracking.</div><div class="tool-foot"><span class="meta-pill">15 tasks \u00b7 3 phases</span><span class="tool-arrow">&#8594;</span></div></a>'+
+ '</div>';
+ var res=[
+   {fmt:'PDF \u00b7 8 pages',title:'GEO guide for industry partners',desc:'The full briefing a DMO forwards to its industry: how AI search works, the six pillars, a 90-day plan, business-type checklists and a glossary.',pdf:'/resources/GEO-industry-guide.pdf',word:'/resources/GEO-industry-guide.docx'},
+   {fmt:'PDF \u00b7 Word',title:'Brief for your agency',desc:'What good looks like and what to ask a web or content agency to deliver, ready to send.',pdf:'/resources/GEO-agency-brief.pdf',word:'/resources/GEO-agency-brief.docx'},
+   {fmt:'PDF \u00b7 Word',title:'RFP and procurement pack',desc:'Evaluation criteria, bidder questions and the data-ownership and exit clauses that protect you.',pdf:'/resources/GEO-rfp-procurement-pack.pdf',word:'/resources/GEO-rfp-procurement-pack.docx'},
+   {fmt:'PDF',title:'Scope-of-work checklist',desc:'Judge whether an agency proposal is real substance or vapour, line by line.',pdf:'/resources/GEO-scope-of-work-checklist.pdf',word:null},
+   {fmt:'PDF \u00b7 Word',title:'Cross-team briefing',desc:'Shared language and each team\u2019s stake, from content and product to leadership.',pdf:'/resources/GEO-cross-team-briefing.pdf',word:'/resources/GEO-cross-team-briefing.docx'},
+   {fmt:'PDF \u00b7 Word',title:'Leadership board paper',desc:'The case and the resourcing ask, framed as infrastructure rather than a campaign.',pdf:'/resources/GEO-leadership-board-paper.pdf',word:'/resources/GEO-leadership-board-paper.docx'}
+ ];
+ var resGrid='<div class="g2 mb" style="gap:1rem">'+res.map(function(r){
+   var dl='<a class="res-dl" href="'+r.pdf+'" download>Download '+arrow+'</a>';
+   var wd=r.word?'<a class="res-word" href="'+r.word+'" download style="font-size:.75rem;color:var(--teal-text);font-weight:500;margin-left:.75rem;text-decoration:none;">Word \u2193</a>':'';
+   return '<div class="res-card"><div class="res-fmt">'+r.fmt+'</div><div class="res-title">'+r.title+'</div><div class="res-desc">'+r.desc+'</div><div style="display:flex;align-items:center;margin-top:.75rem">'+dl+wd+'</div></div>';
+ }).join('')+'</div>';
+ var landscape='<div class="g2" style="gap:1rem">'+
+   '<div class="card card-pad"><div class="lbl navy" style="margin-bottom:.9rem">The monitoring-tool landscape</div><div class="toollist">'+[['Profound','share-of-model'],['Otterly','AI-search tracking'],['Scrunch','citation monitoring'],['Peec','answer analytics'],['Ahrefs Brand Radar','mention tracking'],['Manual prompt set','no-cost baseline']].map(function(t){return '<div class="toollist-item"><b>'+t[0]+'</b> \u00b7 '+t[1]+'</div>';}).join('')+'</div><div style="font-size:.75rem;color:var(--muted);font-weight:300;margin-top:.85rem">Native reports first, free and based on real activity: Bing AI Performance and Google\u2019s Search Generative AI report. Then add one third-party tool. Listed for orientation, not endorsement.</div></div>'+
+   '<div class="card card-pad"><div class="lbl navy" style="margin-bottom:.9rem">Free validators</div><div class="toollist" style="grid-template-columns:1fr">'+[['Rich Results Test','check how Google reads your structured data'],['Schema Markup Validator','validate schema.org markup against the spec'],['Your own prompt set','run ten real visitor queries across three assistants']].map(function(t){return '<div class="toollist-item"><b>'+t[0]+'</b> \u00b7 '+t[1]+'</div>';}).join('')+'</div></div>'+
+ '</div>';
+ var advisory='<div class="advisory" style="margin-top:2.4rem"><div class="adv-l"><div class="adv-eyebrow">Advisory &amp; Impact</div><div class="adv-title">Want this run for you?</div><div class="adv-body">The DTTT team can run the diagnostic, content audit and crawler checks for your destination and hand you the results, or use your workshop credits to run them with your own team.</div></div><div class="adv-r"><a class="adv-primary">Talk to us '+arrow+'</a><a class="adv-secondary">See your workshop credits</a></div></div>';
+ var upnext='<div class="upnext"><div><div class="upnext-l">Up next \u00b7 September 2026</div><div class="upnext-t">AI &amp; the DMO</div><div class="upnext-d">Where AI Discoverability looked outward to visitors, the next programme turns the lens inward: using AI to run a sharper DMO, from team tools to agent-based workflows.</div></div><div class="upnext-cta">Read the brief &#8594;</div></div>';
+ return '<div class="page">'+
+   '<div class="hub-intro"><div class="hub-intro-t">From research to action, in three stages.</div><div class="hub-intro-p">The diagnostic, the tools and the downloads are one workflow, not three menus. See where you stand, use the tools to decide and act, then take the documents to the people who need them. Work straight through, or jump to the stage you need.</div></div>'+
+   flow+
+   '<div class="stage" id="stage-assess">'+stageHead('1','Assess','See where you stand','The readiness diagnostic scores you across five dimensions against programme peers, then returns a gap analysis and a 90-day plan.')+diagInner()+'</div>'+
+   '<div class="stage" id="stage-act">'+stageHead('2','Act','Decide what to do, and start','Three tools turn your position into clear decisions and a managed plan.')+tools+'</div>'+
+   '<div class="stage" id="stage-equip">'+stageHead('3','Equip','Take it to your team and partners','Documents a DMO can adapt and forward, plus the monitoring landscape to measure with.')+resGrid+landscape+'</div>'+
+   advisory+upnext+
+ '</div>';
+}
+var DIMS=[
+  {id:'content',name:'Content infrastructure',q:'How citable is the content AI reads about your destination?',sub:'Think about factual specificity, question-answering format, consistent naming and how regularly key pages are updated.',opts:[['Aspirational and broad','Mostly inspirational prose. Few specific facts a model could lift with confidence.'],['Mixed, updated reactively','Some practical content, but updates are ad hoc and structure is inconsistent.'],['Structured with gaps','Clear architecture, regular updates, specificity on key pages. Some markup in place.'],['Specific and systematically maintained','Pages answer real questions directly, with consistent entities and a documented update cadence.']]},
+  {id:'data',name:'Data ownership',q:'How much of the data AI would draw on do you actually control?',sub:'Think about listings, events, attractions and whether you own or merely link to these feeds.',opts:[['Minimal','We link out to partners and OTAs and hold little structured data ourselves.'],['Partial','Some owned feeds, but major categories are not connected to our systems.'],['Substantial','Contracted access to the main feeds, with defined quality expectations.'],['Comprehensive','We own or control live, structured data across the key entity types.']]},
+  {id:'technical',name:'Technical capability',q:'What is your realistic capacity to implement and maintain this?',sub:'Think about in-house skills, your developer relationship and your ability to manage markup and crawler config.',opts:[['No technical resource','Digital is handled by generalists or a non-specialist agency.'],['Limited','We manage content and basic changes; anything technical goes outside.'],['Capable','In-house or trusted partner development resource with knowledge of our systems.'],['Strong','A digital team that can build, maintain and iterate independently.']]},
+  {id:'capacity',name:'Team capacity',q:'How much ongoing time can the team realistically commit?',sub:'Be honest about time after existing commitments. AI-search work degrades without regular attention.',opts:[['Under 2 hours a week','The team is at capacity; any new work must be near self-sustaining.'],['2 to 4 hours, in bursts','Some capacity, but inconsistent and easily deprioritised.'],['Part-time ownership possible','We could assign one person a defined share of their time.'],['Dedicated resource','We have, or could create, a clear allocation for this work.']]},
+  {id:'governance',name:'Governance maturity',q:'How developed is your approach to accuracy and AI governance?',sub:'Think about how you check what is published, disclose AI use and decide what to adopt.',opts:[['No formal approach','Decisions are ad hoc; no accuracy or disclosure process.'],['Informal','Some awareness, no agreed standards.'],['Basic framework','A disclosure policy, a vendor check and some training in place.'],['Mature','Governance is embedded in the content process and reviewed regularly.']]}
+];
+var BENCH={content:2.4,data:1.9,technical:2.2,capacity:1.8,governance:1.6};
+var PROFILES=[
+  {min:0,max:8,name:'Foundation stage',headline:'Your most urgent investment is infrastructure, not visibility.'},
+  {min:9,max:13,name:'Building momentum',headline:'You have enough foundation to make careful, targeted moves.'},
+  {min:14,max:17,name:'Ready to build',headline:'Your foundations can support ambitious, well-sequenced work.'},
+  {min:18,max:20,name:'Sector-leading',headline:'You are at the frontier. The challenge now is coherence.'}
+];
+function dimScore(id){return S.ans[id]!==undefined?S.ans[id]+1:0;}
+function total(){return DIMS.reduce(function(s,d){return s+dimScore(d.id);},0);}
+function profile(t){return PROFILES.find(function(p){return t>=p.min&&t<=p.max;})||PROFILES[1];}
+function diagInner(){
+  if(S.diagDone){
+    var t=total(),prof=profile(t);
+    var gaps=DIMS.map(function(d){return {name:d.name,score:dimScore(d.id),bench:BENCH[d.id]};}).sort(function(a,b){return a.score-b.score;});
+    var rm=[['Next 30 days','var(--red)',['Run the share-of-model baseline for your top ten visitor queries.','Rewrite your three highest-traffic pages for factual specificity.','Brief leadership on the governance and capacity gaps this surfaced.']],['30 to 90 days','var(--amber)',['Add machine-readable markup to your top 20 entity pages.','Assign named ownership for ongoing AI-search maintenance.','Run the crawler-access checklist and fix what it finds.']],['90 days and beyond','var(--green)',['Stand up a quarterly share-of-model monitoring rhythm.','Develop a lightweight accuracy and disclosure policy.','Sequence your next investment against your lowest dimension.']]];
+    return '<div class="sec-head"><span class="sec-ico use">'+ic('<path d="M12 3a9 9 0 1 0 9 9"></path><path d="M12 12 16 8"></path><path d="M21 12a9 9 0 0 0-9-9"></path>')+'</span><span class="sec-title">Your readiness profile</span></div>'+
+      '<div class="res-header"><div class="res-score"><div class="rsc-l">Your overall score</div><div class="rsc-v">'+t+'<span class="max"> / 20</span></div><div class="rsc-name">'+prof.name+'</div><div class="rsc-d">'+prof.headline+'</div></div>'+
+        '<div class="card card-pad"><div class="lbl navy" style="margin-bottom:1rem">Your scores against programme peers</div>'+DIMS.map(function(d){var sc=dimScore(d.id),b=BENCH[d.id],pct=sc/4*100,bp=b/4*100;return '<div class="dim"><div class="dim-head"><span class="dim-name">'+d.name+'</span><span class="dim-score">'+sc+' / 4</span></div><div class="dim-track"><div class="dim-fill" style="width:'+pct+'%;background:'+(sc>=b?'var(--green)':sc>b-0.5?'var(--amber)':'var(--red)')+'"></div><div class="dim-bench" style="left:'+bp+'%"></div></div><div class="dim-note"><span style="display:inline-block;width:10px;height:2px;background:var(--amber);vertical-align:middle;margin-right:4px"></span>Peer avg '+b.toFixed(1)+' · you '+sc+'</div></div>';}).join('')+'</div></div>'+
+      '<div class="card mb"><div class="sec-head" style="padding:1.1rem 1.3rem 0;margin-bottom:0"><span class="sec-ico use">'+ic('<path d="M3 12h18"></path><path d="m12 3 9 9-9 9"></path>')+'</span><span class="sec-title">Gap analysis · where to focus first</span></div><div style="padding:1rem 1.3rem 1.3rem">'+gaps.slice(0,3).map(function(g,i){var pr=i===0?['Most urgent','var(--red-l)','var(--red)']:i===1?['Address next','var(--amber-l)','var(--amber)']:['Then monitor','var(--green-l)','var(--green)'];return '<div class="gap"><span class="gap-pri" style="background:'+pr[1]+';color:'+pr[2]+'">'+pr[0]+'</span><div><div class="gap-t">'+g.name+' · '+g.score+'/4 (peer avg '+g.bench.toFixed(1)+')</div><div class="gap-d">'+(g.score<=1?'A binding constraint. Most visibility work will underperform until this improves.':g.score<=2?'Below peer average and limiting your ability to sustain results. Improving it compounds elsewhere.':'A solid base. Maintain it while you focus resource on lower-scoring dimensions.')+'</div></div></div>';}).join('')+'</div></div>'+
+      '<div class="card"><div class="sec-head" style="padding:1.1rem 1.3rem 0;margin-bottom:0"><span class="sec-ico use">'+ic('<rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path>')+'</span><span class="sec-title">Your 90-day roadmap</span></div><div style="padding:1.1rem 1.3rem 1.3rem"><div class="rm-grid">'+rm.map(function(c){return '<div><div class="rm-head" style="color:'+c[1]+';border-color:'+c[1]+'">'+c[0]+'</div>'+c[2].map(function(a){return '<div class="rm-item">'+a+'</div>';}).join('')+'</div>';}).join('')+'</div><div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.1rem;padding:.75rem 1rem;background:var(--bg);border:1px solid var(--border);border-radius:3px"><span style="font-size:.8125rem;color:var(--muted);font-weight:300">Based on your self-assessment. Directional, not definitive. Saved to My position.</span><button class="d-btn sec" id="d-reset" style="padding:.55rem 1.1rem">Retake</button></div></div></div>';
+  }
+  var dim=DIMS[S.diagStep],pct=Math.round(S.diagStep/DIMS.length*100);
+  return '<div class="g2 mb" style="gap:1rem"><div class="fc key"><div class="fc-l">What this produces</div><div class="fc-t" style="font-size:.875rem;font-weight:400">Five questions, one per dimension of readiness. Your answers produce a scored profile benchmarked against the community, a gap analysis and a prioritised 90-day plan, saved to My position.</div></div><div class="fc warn"><div class="fc-l">How to answer</div><div class="fc-t" style="font-size:.875rem;font-weight:400">Answer for your current reality, not your aspirations. If you are between two options, choose the lower one. Over-estimating is the main reason a result feels irrelevant.</div></div></div>'+
+    '<div class="diag-wrap"><div class="diag-prog-row"><span class="diag-prog-l">Dimension '+(S.diagStep+1)+' of '+DIMS.length+'</span><span class="diag-prog-l">'+pct+'% complete</span></div><div class="diag-prog-bar"><div class="diag-prog-fill" style="width:'+pct+'%"></div></div>'+
+      '<div class="diag-dim-l">Dimension '+(S.diagStep+1)+' · '+dim.name+'</div><div class="diag-q">'+dim.q+'</div><div class="diag-sub">'+dim.sub+'</div>'+
+      '<div class="diag-opts">'+dim.opts.map(function(o,i){return '<div class="diag-opt'+(S.ans[dim.id]===i?' sel':'')+'" data-oi="'+i+'"><div class="diag-opt-n">'+(i+1)+'</div><div><div class="diag-opt-t">'+o[0]+'</div><div class="diag-opt-d">'+o[1]+'</div></div></div>';}).join('')+'</div>'+
+      '<div class="diag-nav"><button class="d-btn sec" id="d-back" '+(S.diagStep===0?'disabled':'')+'>&#8592; Back</button><span style="font-size:.75rem;color:var(--muted)">Score 1 to 4 · 20 maximum</span><button class="d-btn pri" id="d-next" '+(S.ans[dim.id]===undefined?'disabled':'')+'>'+(S.diagStep===DIMS.length-1?'See my profile &#8594;':'Next &#8594;')+'</button></div>'+
+    '</div>';
+}
+
+function render(){
+  document.querySelectorAll('.tb').forEach(function(el){el.classList.toggle('on',el.dataset.sec===S.sec);});
+  document.querySelectorAll('#sbnav .ni[data-sec]').forEach(function(el){el.classList.toggle('on',el.dataset.sec===S.sec);});
+  var m={overview:rOverview,snapshot:rSnapshot,deepdive:rDeepDive,bestpractice:rBestPractice,toolkit:rToolkit};
+  document.getElementById('main').innerHTML=(m[S.sec]||rOverview)();
+  bind();
+}
+function bind(){
+  document.querySelectorAll('[data-goto]').forEach(function(el){el.addEventListener('click',function(){set({sec:el.dataset.goto});window.scrollTo({top:0,behavior:'smooth'});});});
+  document.querySelectorAll('.psub-btn[data-part]').forEach(function(el){el.addEventListener('click',function(){set({part:el.dataset.part});window.scrollTo({top:0,behavior:'smooth'});});});
+  document.querySelectorAll('.kd[data-kd]').forEach(function(el){el.addEventListener('click',function(){var i=el.dataset.kd,o={};Object.assign(o,S.kd);o[i]=!o[i];set({kd:o});});});
+  document.querySelectorAll('.diag-opt[data-oi]').forEach(function(el){el.addEventListener('click',function(){var id=DIMS[S.diagStep].id,a={};Object.assign(a,S.ans);a[id]=parseInt(el.dataset.oi);set({ans:a});});});
+  var dn=document.getElementById('d-next');if(dn)dn.addEventListener('click',function(){if(S.diagStep<DIMS.length-1)set({diagStep:S.diagStep+1});else set({diagDone:true});window.scrollTo({top:0,behavior:'smooth'});});
+  var db=document.getElementById('d-back');if(db)db.addEventListener('click',function(){if(S.diagStep>0)set({diagStep:S.diagStep-1});});
+  var dr=document.getElementById('d-reset');if(dr)dr.addEventListener('click',function(){set({diagStep:0,ans:{},diagDone:false});});
+  (function(){var cs=document.querySelectorAll('.surf-card[data-hx]');if(cs.length){var pn=document.querySelectorAll('.surf-conn path[data-conn]');var def=1;function act(i){cs.forEach(function(c){c.classList.toggle('on',+c.dataset.hx===i);});pn.forEach(function(p){p.classList.toggle('on',+p.dataset.conn===i);});}act(def);cs.forEach(function(c){var i=+c.dataset.hx;c.addEventListener('mouseenter',function(){act(i);});c.addEventListener('focus',function(){act(i);});c.addEventListener('mouseleave',function(){act(def);});c.addEventListener('blur',function(){act(def);});});}})();
+  document.querySelectorAll('.rc-item[data-jump]').forEach(function(el){el.addEventListener('click',function(){var t=document.getElementById('part-'+el.dataset.jump);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});});
+  document.querySelectorAll('.flow-step[data-stage]').forEach(function(el){el.addEventListener('click',function(){var t=document.getElementById('stage-'+el.dataset.stage);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});});
+}
+document.querySelectorAll('.tb[data-sec]').forEach(function(el){el.addEventListener('click',function(){set({sec:el.dataset.sec});window.scrollTo({top:0,behavior:'smooth'});});});
+document.querySelectorAll('#sbnav .ni[data-sec]').forEach(function(el){el.addEventListener('click',function(){set({sec:el.dataset.sec});window.scrollTo({top:0,behavior:'smooth'});});});
+render();
+
+</script>
+</body>
+</html>

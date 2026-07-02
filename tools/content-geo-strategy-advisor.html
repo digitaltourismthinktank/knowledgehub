@@ -387,7 +387,7 @@ const OBJ_COL={awareness:'comparison',dispersal:'seasonal',bookings:'itinerary',
 const CHAN={
  own:{label:'Your own website',why:'Where you control the answer, and the source you most want cited.'},
  wiki:{label:'Wikipedia and Wikidata',why:'Disproportionately trusted by models, and how they work out who you are.'},
- google:{label:'Google Business and map profiles',why:'Often the structured source an assistant reaches for first.'},
+ google:{label:'your destination directory and map profiles',why:'Often the structured source an assistant reaches for first.'},
  ota:{label:'OTA and review profiles',why:'Frequently cited for where to stay and what to do.'},
  pr:{label:'Digital PR and earned media',why:'Independent coverage is the authority models lean on.'},
  partner:{label:'Partner and operator content',why:'Extends your reach through sources you can enable.'},
@@ -603,7 +603,7 @@ function renderResult(){
   ${secHead(ICO.map,'Content focus matrix','Your audiences against the content types that earn citations, with where to begin.')}
   ${renderMatrix(a)}
 
-  ${secHead(ICO.layers,'Channel weighting','Where to put effort beyond your own site, tilted to your type and markets.')}
+  ${secHead(ICO.layers,'Channel weighting (which channels carry most weight for your strategy, and why)','Where to put effort beyond your own site, tilted to your type and markets.')}
   ${renderChannels(a)}
 
   ${secHead(ICO.list,'Focus for the next quarter','Sequenced and sized to your capacity. Start at the top.')}
@@ -612,9 +612,9 @@ function renderResult(){
   ${secHead(ICO.compass,'Where this goes next','How the strategy becomes judgements and tasks.')}
   <div class="where">
     <div class="where-l">From strategy to action</div>
-    <div class="where-d">This plan sets the direction. The Tactics and Ethics Checker judges any specific tactic you are weighing, and the Implementation Programme holds the tasks and tracks progress. The Readiness Diagnostic is the companion check on whether you can execute. Together they take you from where to focus, to what to do, to done.</div>
+    <div class="where-d">This plan sets the direction. The GEO Tactics checker Checker judges any specific tactic you are weighing, and the Implementation Programme holds the tasks and tracks progress. The Readiness Diagnostic is the companion check on whether you can execute. Together they take you from where to focus, to what to do, to done.</div>
     <div class="where-links">
-      <a class="where-link" href="tactics-ethics-checker.html" target="_blank" rel="noopener">${ICO.ext} Tactics and Ethics Checker</a>
+      <a class="where-link" href="tactics-ethics-checker.html" target="_blank" rel="noopener">${ICO.ext} GEO Tactics checker Checker</a>
       <a class="where-link" href="implementation-programme.html" target="_blank" rel="noopener">${ICO.ext} Implementation Programme</a>
     </div>
   </div>

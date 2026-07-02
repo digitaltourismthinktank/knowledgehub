@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Implementation Programme · AI Discoverability · DTTT Member Platform</title>
+<title>Implementation plan · AI Discoverability · DTTT Member Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -197,8 +197,8 @@ tr.focusrow td{animation:flash 2.2s ease}
     <div class="top-bar">
       <div class="top-bar-inner">
         <div class="bc">Knowledge Hub <span class="sep">/</span> AI Discoverability <span class="sep">/</span> Tools</div>
-        <h1 class="pt">Implementation Programme</h1>
-        <div class="ps">A template backlog for acting on the AI Discoverability research. It turns the readiness diagnostic roadmap into specific tasks across three phases, each with an owner, an effort estimate and the resource that supports it. Items you send over from the Strategy Advisor and the Tactics and Ethics Checker land here too.</div>
+        <h1 class="pt">Implementation plan</h1>
+        <div class="ps">A template backlog for acting on the AI Discoverability research. It turns the readiness diagnostic roadmap into specific tasks across three phases, each with an owner, an effort estimate and the resource that supports it. Items you send over from the Strategy Advisor and the GEO Tactics checker land here too.</div>
       </div>
     </div>
     <div class="page" id="page"></div>
@@ -231,7 +231,7 @@ const PLAN=[
 
 let S={phase:'all',prio:'all',quick:false,status:{},added:[],focusId:null,banner:null,_scrolled:false};
 let addSeq=0;
-const SRC_LABEL={checker:'the Tactics and Ethics Checker',advisor:'the Strategy Advisor',benchmark:'the GEO Benchmark',you:'you'};
+const SRC_LABEL={checker:'the GEO Tactics checker',advisor:'the Strategy Advisor',benchmark:'the GEO Benchmark',you:'you'};
 const SRC_SHORT={checker:'From the Checker',advisor:'From the Advisor',benchmark:'From the Benchmark',you:'Added by you'};
 function allTasks(){return PLAN.concat(S.added);}
 function clampPhase(p){p=parseInt(p);return (p===1||p===2||p===3)?p:1;}
